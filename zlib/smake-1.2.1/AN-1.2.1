@@ -1,0 +1,49 @@
+NEW features of smake-1.2.1:
+
+-	./.clean now removes symlinks
+
+-	x86_64-dragonfly-cc.rul & x86_64-dragonfly-gcc.rul new
+
+-	Addex experimental rules for using "pcc" on Solaris x86
+
+-	New autoconf test on whether Compiler supports "inline" keyword
+
+-	New autoconf test if struct stat contains st_atime_n (nanosecs)
+
+-	New autoconf test if struct stat contains st_flag
+
+-	C-dependencies on AIX are now extracted using cc -M -qsyntaxonly
+
+-	As the new Intel 64 bit strcpy() implementation does not work
+	correctly with overlapping strings, smake now includes a ovstrcpy()
+	function to avoid related problems.
+
+-	Smake now supports $(EMPTY): target names.
+
+-	A minor bug in the makefile parser was fixed. The bug caused targets
+	that appeared directly after an otherwise emty line that started
+	with a TAB char to be ignored.
+
+TODO:
+	Smake would need to implement an undocumented feature from 
+	historical UNIX make implementations that is used by Xorg
+	at one place:
+
+	target: *.o
+		do-something-with *.o
+
+	Which expands *.o from the filesystem. Meanwhile, use 
+	smake -N to compile Xorg.
+
+After pattern expansion has been implemented, smake-1.2 final
+will be released.
+
+P.P.S.: As Xorg changed it's build system, we may delay this
+feature to something past 1.2-final.
+	
+
+
+WARNING: Do not use 'winzip' to extract the tar file!
+	Winzip cannot extract symbolic links correctly.
+
+Joerg

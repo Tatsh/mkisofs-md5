@@ -1,0 +1,1057 @@
+NEW features of smake-1.2:
+
+-	Autodetection of rotten symlinks in the psmake/ directory.
+	If links are files of size 0, remove the files and create copies.
+	This allows smake to be ompiled on OS/2
+
+-	Use rename() if possible to make smake run on OS/2 too.
+
+-	modified autoconf to allow configure to run on OS/2
+
+-	Better recognition of old versions of the makefilesystem
+	Old versions of the makefilesystems don't define pattern
+	matching rules for smake. This may give problems with newer
+	smake's if (higher priorized) POSIX suffix rules are preent.
+
+-	Now compiles on QNX
+
+-	Now compiles in HP-UX when using the 
+	boundled K&R compiler
+
+-	Fixed a malloc() related coredump problem in setmakeenv() that 
+	could be observed on SCO Openserver when compiling
+	cdrecord.
+
+-	Better rules for SCO Openserver & UnixWare
+
+-	changed shlicc2 to shlicc for BSD/OS
+
+-	Better autoconf fconv.c code for isinf()/isnan()
+
+-	Made working for the new Mac OS X version
+
+-	Using a recent version of fconv.c to make it copile
+	again on FreeBSD and HP-UX.
+
+-	Allow compilation on Rhapsody 5.6 (Mac OS X)
+
+-	Allow compilation on Darvin (Mac OS X)
+
+-	Allow compilation on Apollo Domain/OS
+
+-	Additional warnings for printf() alike functions.
+
+-	Workaround for rotten PROMPT environment
+	on Cygwin.
+
+-	Workaround for GCC-3.0 on Linux oddities.
+
+-	make floating point printf() code compile again
+	on True64
+
+-	Better portability
+
+-	MacOS X 10.1 (Darwin-1.4 support)
+
+-	True64 support
+
+-	Support for QNX Neutrino
+
+-	Support for SCO/Caldera OpenUNIX
+	Fixed a bug in fconv.c
+
+-	Warn if a target has modification time in the future
+
+-	Avoid endless loop if the makefile hass an EOF after
+	certain synxtax errors.
+
+-	Better error messages for badly formed Makefiles
+	(TAB at wrong place).
+
+-	Large File support for IRIX-6.2 (added autoconf test for -n32 cc option)
+
+-	Large File support for IRIX-6.5 now everything works correctly if the
+	OS supports Large Files by default in 32 bit mode (uses fseeko()/ftello()
+	if present. This could only be done by massively changing the autoconf code
+	stolen from GNUtar.
+
+-	Support for SGI IRIX platform ip17-irix
+
+-	Try to support recent BeOS (again)
+
+	-	Workaround in libschily/comerr.c for the nonstandard 
+		big negative errno values on BeOS
+
+-	AmigaOS Support added
+
+-	Better support for exotic time_t typedefs
+
+-	Added missing files fcons64.c fileopen64.c fileseek64.c for
+	large File support
+
+-	New supported architectures:
+
+	s390-linux-cc.rul parisc-linux-cc.rul parisc64-linux-cc.rul
+
+-	New rule allows automatic fallback to GCC if the configured
+	default compiler could not be found.
+
+-	New autoconf test HAVE_SIGSET
+
+-	comerr() now correctly prints error texts on BeOS.
+
+-	New supported architectures:
+
+	os-cygwin_nt-5.1.id NT-5.1 == Win XP
+
+-	Workaround for a GNUmake bug 
+
+	When compiling smake on OS/2 or on Cygwin,
+	GNUmake is used to compile the first stage of smake.
+	When GNUmake then calls psmake/smake to compile the second
+	stage, the following error message is printed:
+	
+	smake: Missing object name in line 1 col 7 of 'Environment defs'
+	smake: Current read buffer is: '(NULL POINTER)'
+	smake: Bad syntax in 'Environment defs'.
+
+	This is caused by the fact that GNUmake puts non POSIX compliant
+	strings into the MAKEFLAGS environment. In our case '--unix'
+
+	Smake now warns and skips illegal options found in MAKEFLAGS=
+
+-	Fixed a bug in the error printing routine from smake that caused
+	'(NULL POINTER)' to be printed in the example above.
+	Smake now will print
+		smake: Current read buffer is: '--unix'
+	in similar situations.
+
+-	Make it compile on OS/2 out of the box
+
+-	add CONFIG_NOFAIL=TRUE in psmake/MAKE.sh to allow compilation
+	of the portable bootstrap make on unknown platforms
+
+-	fillbytes.c corrected
+
+-	Added links for ia64-linux to the Make RULES to allow users of GNUmake
+	to compile cdrtools on IA64. Note that "smake" includes automake
+	features and will auto-create the missing links.
+
+-	make some printf() formats 64 bit clean
+
+-	gfileid() now returns Llong and thus is a better file hash.
+
+-	Added support for GNU Hurd to the Schily Makefilesystem
+
+-	HP-HX "make" calls us with MAKEFLAGS=b
+	Make smake more robust against buggy environment.
+
+-	Allow to create make Dependencies with AIX-cc and HP-UX-cc
+
+-	Some fixes for Dependency creation with compilers that
+	output "foo.o :" instead of "foo.o:"
+
+-	Change makefile system $(MAKE) -> "$(MAKE)"  to allow
+	compilation inside directories that contain spaces in the path.
+
+-	config.sub now supports IA-64
+
+-	align_test.c now creates correct brackets
+
+-	comerr() now deals with strange POSIX rules for strerror()
+
+-	Printf() handling for %X vs. %x fixed
+
+-	Renamed psmake/MAKE to psmake/MAKE-all to avoid endless recursion on
+	OS with non-POSIX filesystem semantics (case-sensitivity) e.g. OS/2
+	and MacOS X with non-UNIX FS.
+
+-	Renamed psmake/MAKE.sh to psmake/MAKE-sh to avoid problems with buggu shells
+	like PDKSH which illegaly call 'MAKE.sh' if you type 'MAKE'.
+
+-	Changed a Makefile line from 'cd psmake; sh MAKE-all' to
+	'cd psmake && sh MAKE-all' to work around a bug in either the shell or GNU make
+	on OS/2
+
+-	New platforms:
+
+	9000-831-hp-ux sparc64-freebsd macppc-netbsd sparc-bsd-os sparc-bsd-os3
+	i786-cygwin32_nt i486-unixware i586-unixware pentium-iii-unixware
+	pentium-pro-unixware
+
+-	New install rules for hardlinks
+
+-	Use +DAportable for HP-UX cc
+
+-	BSD-OS-3.x does not need 'shlicc' anymore
+
+-	Add $(RANLIB) -> true for OS/2
+
+-	Added some prototypes for non ANSI-C OS in include/unixstd.h
+
+-	fixed typo in include/fctldefs.h for O_ACCMODE
+
+-	include/strdefs.h for better AIX compatibility
+
+-	correctly evaluating HAVE_UNION_WAIT in include/waitdefs.h for
+	vanilla BSD-4.2 systems like Next-Step
+
+-	nanosecond access macros for include/statdefs.h
+
+-	dependency generation script conf/mkdep-sco.sh for SCO unix fixed
+
+-	Using spawnl(P_NOWAIT, ...) on OS/2 EMX instead of fork()/exec()
+
+-	include ctypes.h -> past schily.h for OpenBSD #define EOF BUG
+
+-	fcons.c changed because FI_APPEND problem in SCO UnixWare and
+	fileopen("/dev/null", "wca")
+
+-	Changed -pg (profiling compile option) to -p on SCO UnixWare because there
+	is no -pg on this platform.
+
+-	Changes related to the now portable software signal system handlecond()/raisecond()
+
+-	Trying to better follow the 'cstyle' indentation conventions
+
+-	Changes conf/cc-config.sh to better find out that a user is incorrectly
+	calling 'make' on Solaris with /usr/ucb in PATH and with no real C-compiler
+
+-	strcatl()/execl() now cast NULL in last Arg to (char *)NULL
+	This avoids problems on platforms where sizeof(int) is != sizeof (ptr)
+
+-	Completely converted to use the rename() emulation from libschily
+	in case a OS does not support rename()
+
+-	Trying to support a compilation on DOS (32 Bit) with DJGPP
+	As GNU make does not work correctly on DOS, this allows Schily SING
+	programs to be compiled on DOS/DJGPP
+
+-	use #ifdef SIGBUS in avoffset.c as DOS/DJGPP does not have SIGBUS
+
+-	Indented to be closer to official Cstyle indentation
+
+-	Support for the special .PHONY: target.
+
+	This helps to deal with files like INSTALL operating systems
+	like Win32 and Mac OS that don't honor file name case and prevents
+	the file named INSTALL to get into trouble with 'make install'
+
+-	install-sh extended to avoid unremovable files /tmp/xx.$$ on SCO UNIX
+	that are a result of the root test. They are unremovable because
+	SCO UNIX allows to give away files to root ans sets the sticky bit on /tmp.
+
+-	'make install' now works on operating systems that require a '.exe'
+	suffix for executable binaries
+
+-	Fixed a bug in the parser that caused macro expansions not to
+	work in target lists, e.g.:
+
+	$(TEST:a=b): foo
+
+	because the parser did stop reading the name at: "$(TEST"
+	believing that the colon is always a target list terminator.
+
+	Now, ${} & $() macro expansions are handled correctly even when nested.
+
+-	Add a workaround for a SCO OpenServer C-compiler bug.
+	The bug causes the first function in a function to be called
+	before the new stack frame has been established and did cause
+	scanning the stack frame to fail.
+
+-	made snprintf() POSIX compliant
+
+-	Try to find sh.exe from PATH on DJGPP
+	Thanks to Alex Kopylov <reanimatolog@yandex.ru>
+
+-	We now call caommands again via sh -ce 'cmd' instead of
+	sh -c 'cmd' (which is what POSIX requires).
+	It turned out that POSIX is wrong and causes complex commands
+	(e.g. commands that use ';') that fail not to cause smake
+	to stop on this error.
+
+	Note that smake originally has been correct and did use sh -ce.
+	Missleaded by the fact that GNU make (at this point) follows
+	the POSIX standard, smake has been changed to use sh -c.
+	We now correct our misstake.
+
+-	.POSIX target documented in the man page
+
+-	Command execution now finally has been fixed:
+
+	/bin/sh -ce cmd is called by default to abort on error
+	/bin/sh -c cmd is called is for 'smake -i'
+	
+-	Checking vor valid time in dyn macro expansion (e.g. $?)
+	because the time stamp of a not yet existent target may
+	have been intermediately set to RESURCETIME. This would
+	have caused $? to be incorrectly expanded.
+
+-	Try to add a workaround for broken Makefiles like:
+
+	all: $(SUBDIRS)
+
+	$(SUBDIRS): FORCE
+		cd $@ && $(MAKE) $(MAKEDEFS)
+
+	FORCE:
+
+	The target FORCE is not only completely unneeded; it would
+	cause the Sub directories not to be made except when smake
+	introduces a special implict behavior that treats FORCE:
+	as a target that could be correctly made altohough there is
+	no implicit dependency FORCE.c as there is neither an 
+	explicit dependency not an explicit command list.
+
+-	Support for Linux on amd64 has been added
+
+-	smake now should be useful as a general make utility
+	as it now includes all needed default rules required by POSIX
+
+-	Starting to implement Termination pattern rules
+	using :: as Terminator (not yet ready).
+
+-	Syntax errors now are less verbose again, but
+	smake -d will turn on printing the read buffer
+	of the parser to help to debug the problem.
+
+-	Simple Suffix Rules are no longer allowed to start with "./"
+	as this is a valid target name.
+
+-	Better EOF checking in the parser to avoid infinite loops.
+
+-	A parser bug has been fixed that did cause smake not
+	to stop parsing macro definitions in dependency lists
+	if not surrounded by () or {}.
+
+-	default_cmd() now returns NOTIME in case no default
+	rule could be found and the target has no prerequisites.
+	This avoids superfluous "all is up to date" messages
+	in case that no suffix rules have been defined.
+
+-	Switch from our own "Simple Pattern Rules" for implicit rules
+	to POSIX Single and Double suffix Rules.
+
+-	smake -p now includes comment headlines that allow for better
+	identification of the various sections in the output.
+
+-	The directory rules for the Schily makefile system have
+	been modified to work around a bug in /bin/sh on BSDi 
+	systems.
+
+-	smake now has been tested with various makefiles from various
+	software and is expected to be able to be used to compile
+	any piece of software that does not rely on bugs found in specific
+	make implementeations. The following problems are currently known:
+
+	-	GNU make comes with two files called 'SMakefile' and
+		thus feeds two files with the preferred Makefile name
+		into smake. Unfortunately, these two file in GNU make do
+		not contain valid make syntax.
+
+		Solution: Before you like to compile GNU make using smake,
+		you need to remove "SMakefile" and "glob/SMakefile".
+
+
+	-	Samba comes with a Makefile that illegally useses the '$<'
+		dynamic macro in commands for explicit rules. The '$<'
+		dynamic macro is only expanded in case that an
+		implicit (inference) rule is processed. As samba uses '$<'
+		inside an explicit rule where this dynamic macro has no
+		meaning (see POSIX make standard) it is expanded to nothing
+		but space by smake.
+
+		Solution: change '$<' to a manual copy of the source file
+		for explicit rules.
+
+
+	-	Samba comes with a Makefile that illegally useses the '$*'
+		dynamic macro in commands for explicit rules. The '$*'
+		dynamic macro is only expanded in case that an
+		implicit (inference) rule is processed. As samba uses '$*'
+		inside an explicit rule where this dynamic macro has no useful
+		meaning (see POSIX make standard) and smake cannot know the
+		'right' suffix, '$*' is expanded to the part of '$@' being
+		left to the rightmost '.' character in '$@' by smake.
+
+		Solution: change something like '$*.po.o' to '$@'
+		for explicit rules.
+
+	-	If you find other problems, plese report and let us find
+		the reason..... It is most likely that the related
+		Makefile is buggy.
+
+
+-	smake -d now prints make level (in case of recursive make calls)
+	and the working directory for smake.
+
+-	smake -d now prints .OBJDIR .OBJSEARCH .SEARCHLIST (needed -dd before)
+
+-	The parser has been fixed so that white space at the end of a list
+	will no longer be expanded into a Null ('') object name:
+
+	DUMMY=
+	LIST= 1 2 3 4 $(DUMMY)
+
+	target: $(LIST)
+
+	Did create such a problem.
+
+-	Better source comments for FORCE: target type special treatment.
+
+-	FORCE: Target type special treatment is now done even when
+	the target in question is the current default target.
+
+-	Print the .PHONY: state of a target in various debug output
+
+-	smake -t does no longer touch targets marked
+	as .PHONY:
+
+-	Debug print of default target is now also included if the default
+	target is explicitly named via arvg[] from main().
+
+-	Smake no longer strips off the directory name for targets
+	when expanding the '$*' Dynamic macro.
+
+	Smake did previously expand '$*' for dir/name.o -> name
+	Smake now           expands '$*' for dir/name.o -> dir/name
+
+-	make sure a rule like:
+
+	../somedir/target: ../somedir/source
+
+	will not be falsely detected as Simple Suffix rule
+
+-	Expand the right side if a VPATH= statement
+	to allow VPATH=$(srcdir) to work.
+
+-	.SUFFIXES Target will no longer be overwritten
+	but appended if asigned in a new Makefile.
+	This allows a .SIFFIXES: .suf line in Makefile
+	to append to the likst of the internal makefile.
+
+-	CFLAGS += now works again (parser fixed).
+
+-	The dynamic macro $O (.OBJDIR or "." if .OBJDIR
+	has not been defined) may now be overwritten.
+	This makes smake more POSIX compliant as POSIX
+	does not include a dynamic macro $O.
+
+-	Print the current directory in case it a exitcode != 0
+
+-	Support for :: rules added.
+	This is not POSIX but historic use in makefiles.
+
+-	Intermediate target nodes are now fully initialized.
+
+-	Smake now appends to dependency lists even when the new definition
+	is found in a new makefile (-f option). Before, smake did overwrite
+	such definitions.
+
+-	Smake now changes the type from environment macro definitions into
+	target definitions if the same name is later found in a Makefile.
+	This is eg. needed if the environment contains host=foo and the
+	Makefile contains host: host.c
+
+-	If a second explicit rule for a target is found and it contains
+	command definitions, smake now no longer overwrites the list of 
+	command line definitions with the new list but keeps the first 
+	definition.
+
+-	If a second explicit rule for a target is found and it contains
+	no command definitions, smake now no longer kills the old definitions.
+
+-	Smake now warns if the dynamic macros '$*' & '$<' are used on commands
+	for explicit Target Rules. Note that Sun Make as well as GNU make are
+	broken in this area (*) and smake's behavor is the best a make program
+	may do.
+
+	*) 
+	Sun Make calls (even though this is an _explicit_ rule) the implicit
+	rule check and looks for possible implicit sources. If a possible
+	implicit source file exists, '$<' is set to that name even though it
+	is completely unrelated to the explicit rule. If a fitting entry from 
+	.SUFFIXES: exists, '$@' is stripped to create '$*'.
+
+	GNU make returns the first name from the dependency list for '$<' and
+	strips '$@' using a fitting entry from .SUFFIXES: to create '$*'.
+
+
+-	smake no longer tries to "make" the content from o_list of
+	a NAME=val type object.
+	
+-	smake no longer has a command line macro limit of 64, the
+	command line macros are now inside allocated memory
+
+-	smake no longer has a -f makefile option limit of 32, the
+	makefile names are now inside allocated memory
+
+-	The top level Makefile in SRCROOT now calls
+	psmake/smake -r to make sure that no broken
+	internal rules (that could be loaded from
+	a file) may be active.
+
+-	Support for the ':=' assignement oparator that
+	may be used with make macros:
+
+	CFLAGS := $(OTHER_VAR)
+
+	Will not assign the text "$(OTHER_VAR)" to
+	CFLAGS but the content if the macro $(OTHER_VAR)
+
+	As this feature is nonportable, smake warns
+	when the feature is used. (Note that Sun make
+	uses := for conditional macro assignement).
+
+-	Smake now detects endless recursions from bad
+	default rules.
+
+-	Smake now supports Termination pattern matching
+	rules
+		target:: source
+			command
+
+	If a Termination rule is found, smake does not
+	search for possible sources for intermediate
+	source file names. This allows to e.g. create 
+	a pattern rule for fetching SCCS files from 
+	the repository:
+
+		%:: s.%
+			sccs get $@
+
+	Note that this rule would otherwise result
+	in a endless recusion.
+
+-	Smake now prints Command line Exit messages for
+	failed commaned even if not in debug mode.
+
+-	Better messages when exiting with exit code != 0
+
+-	Makefile fixed to search for the make default rules
+	in $(INS_DIR)/lib/defaults.smk instead of
+	$(INS_DIR)/lib/default.smk
+
+-	New configure #ifdef DEFAULTS_PATH_SEARCH_FIRST
+	tells smake to search for lib/default.smk in
+	PATH first.
+
+-	Smake now also searches for lib/default.smk in
+	case av[0] contains a path name with slashes.
+
+-	Add snprintf.c to allow compilation on HP-UX-10.x
+
+-	-k / -S Option implemented according to POSIX
+
+-	.s.o: Assembly rules added to default rules and
+	to .SUFFIXES
+
+-	...move and ...touch messages now go to stdout as
+	the command verbose messages
+
+-	messages from exit handler now only if
+		excode != 0 && Mlevel > 0
+		Debug > 0   && Mlevel > 0
+
+-	Check for NAMEMAX in getln() deactivated
+
+-	Do not check for default rules in case of 
+	final :: rules
+
+-	install-sh updated to know that 
+	BSDi chown is in /usr/sbin
+
+-	Smake now may be used to compile Xorg.
+
+-	New option -N
+	Continue if no source for nonexistent dependencies found.
+
+-	Evaluate the SHELL macro acording to POSIX.
+	SHELL has been previously ignored completely.
+
+-	Do not allow names with a SLASH inside at the right
+	side of a Simple Suffix Default Rule.
+	This helps smake to ignore the junk at the end of some
+	POSIX Suffix rules found in the makefiles of Xorg.
+
+-	Let smake warn about junk at the end of POSIX
+	suffix rules. This helps to flag broken makefiles
+	like those found in the Xorg tree.
+
+-	The dynmac expander now correctly handles the case when
+	the growable buffer has to be relocated when it grows.
+
+-	The dynmac expander now does no longer add unneded spaces
+	in lists. This allows smake to be used to compile Xorg.
+
+-	Smake now gives better warnings with illegal dynmac usage.
+	This helps to locate illegal dynmac usage in highly complex
+	projects like Xorg.
+
+-	Make sure that $(VAR:%=PREFIX/%) does expand to nothing
+	in case that $(VAR) is empty.
+
+-	export VAR now expands the content of the make macro "VAR"
+	before putting the content into the environment.
+
+-	print a better warning message when smake finds too many
+	target items (targets left to a ':') for a rule.
+
+-	Now using recent a makefiles-1.5 alpha
+
+	-	Avoid an endless loop with 'tr' on Solaris if 
+		/usr/ucb/ is before /usr/bin in PATH
+
+-	Let fileopen() flose the fd in case that it could not
+	get a FILE * struct for fd.
+
+-	Added support to compile 64 bit versions by calling
+
+		smake CCOM=cc64
+
+-	Search for additional matching pattern rules in case the
+	first rule match did not result in a matching file name.
+
+-	Many new features from a newer makefile system:
+
+	-	armv5teb-linux new
+
+	-	i386-darwin new (Macos X)
+
+	-	i386-dragonfly
+
+	-	mips64-linux
+
+	-	sun4v-sunos5
+
+	-	Better BeOS/Zeta support
+
+	-	UID/GID used for installation changed to match Cygwin
+		and Mac OS X
+
+-	psmake/Makefile updated to include seterrno.c although this
+	makefile usually is not needed.
+
+-	Various modifications to allow compiling with MSVC
+
+	-	Suport for compiling with MSVC ("cl") from a
+		Cygwin shell added: i386-cygwin32_nt-cl.rul
+
+	-	Schily Autoconf basics fixed so it is able to deal
+		with the specifics with the "cl" (MSVC) compiler.
+
+	-	Serveral Schily Autoconf tests have been extended 
+		to support the include file structure from MSVC
+		that is far from c89/c99/POSIX.
+
+	-	A test for __int64 was added to support 64 bit
+		ints with "cl" (MSVC) that lacks "long long".
+
+	-	align_test.c now uses the abstract type Llong
+		instead of "long long" ort "__int64".
+
+	-	psmake/MAKE-sh has been enhanced to support "cl".
+
+	-	Makefilesystem restructured to have platform
+		config files that include a compiler config file.
+	
+-	Support for "Interix" was added in order to support
+	"Services for UNIX" from Microsoft (compiling on the
+	POSIX subsystem of MS-WIN).
+
+-	Allow $O to be usd in pattern matching expansions.
+
+-	Under some circumstances, the Macro expansion code did
+	eat up whitespace. This has been corrected.
+
+
+-	Fixed some serious problems with the "growable buffer"
+	that is used for string processing.
+
+-	Made all string copy operatios safe against buffer overflows
+
+-	New Makefilesystem supports C++
+
+-	Added the missing strlcpy.c and strncpy.c entries in 
+	the directory psmake/
+
+-	Updated to a newer version of the Schily autoconf.
+
+-	License change from GPL to CDDL
+
+-	Updated to a newer version of the Schily autoconf.
+
+-	The Schily Makefilesystem now defines -DSCHILY_BUILD
+
+-	The Schily Makefilesystem now includes environment definitions
+	for the Microsoft Studio 8 compiler. If you like to edit these
+	definitions, check the DEFAULTS directory
+
+-	Next step in supporting Microsoft C-compilers: build in environment
+	set up for the MS compilers. To compile with the MS C-Compiler,
+	set up a Cygwin environment and compile a Cygwin 'smake'.
+	Then use this smake to comile with the MS C-compiler by calling:
+
+	smake CCOM=cl
+
+	This defaults to VC7. If you like to use VC6, call:
+
+	smake CCOM=cl VC=6
+
+	Note that smake itself (if compiled with "cl") will not work, as
+	MS does not implement a reliable way to pass a quoted arg vector
+	to a new program.
+
+
+-	#undef SIZE_T_MAX for FreeBSD
+
+-	New and better static VMS config
+
+-	All schily include files now have been moved to include/schily/*
+
+-	Trying to make the floating point printf() support functions work
+	on systems that implement C99 only with no fallback.
+
+	As this change is a result from a report from a person that does not like
+	to cooperate, I was not able to test on the reported AIX-5.x platform.
+	Also note that this change may result in problems on other platforms.
+	Please test and report!
+
+-	New Special Target ".SPACE_IN_NAMES:" allows to have escaped 
+	spaces in object or dependency names.
+
+-	The string lenght limitation for words read from Makefiles
+	has been removed.
+
+-	Macro expansion is no longer using static length limitations.
+
+-	Fixed some lint errors
+
+-	smake -t (touch) now uses utime(2) where available.
+
+-	Added forgotten file psmake/include/schily/utime.h
+	This was needed due to a restructured make.c
+
+-	A small restructuring of the include file structure
+
+-	The makefilesystem now includes support for Sparc64 (Fujutsu Siemens)
+
+-	Fixed a typo in libschily/fconv.c that caused problems with isnan()
+	on AIX5.
+
+-	*printf() removed from libschily, so we need to #define
+	*printf() -> js*printf()
+
+-	If an error occurs, the failing command is printed even in
+	case that the command was run in silent mode.
+
+-	smake now allows to switch of several warnings by adding a line:
+
+	.NO_WARN: <warn-type> ...
+
+	to the makefile. Currently implemented controllable warn types are:
+
+	:=	Do not warn about non-portable MACRO := val assignements
+
+	$*	Do not warn about illegal use of $* in explicit target rules
+
+-	smake now not only implements the workaround for the bash
+	signal bug on Linux but on all platforms that use bash as /bin/sh
+
+-	New autoconf test whether /bin/sh is bash
+
+-	No longer use -Wtraditional for GCC
+
+-	New targets "html" and "htmlx" for Manual page makefiles 
+	allows to convert man pages using "man2html"
+
+-	Dynamic libraries are now supported for Mac OS X
+
+-	Workaround for a Mac OS X linker bug
+
+-	smake CCOM=xx will now result in writing DEFCCOM=xx into incs/Dcc.<platform>
+	if this is done on the initial make run.
+
+-	Remove Wl,-ztext from gcc's command line when linking shared libraries
+	as GCC does not create 100% correct objects and this would result in
+	being unable to link dynamically.
+
+-	Automagically remove /usr/src/linux/include from include if the
+	Linux kernel include files are rotten. This is unfortunately a
+	"result" of the Linux-2.6 series.
+
+-	call "rm -f" to shared library symlink names before trying to create
+	a new symlink
+
+-	smake COPTX=-DNO_LARGEFILES now allows to compile in non-largefile mode
+
+-	schily/stat.h now includes support for S_ISPORT() (event port)
+
+-	Corrected a typo ("#defin") in schily/errno.h
+
+-	getargs() now allows '+' to appear inside longopt=
+
+-	-I. removed from makefile system
+
+-	The makefile system now allows a mix of static and dynamic linking
+
+-	archconf.c enhanced for Mac OS X & *BSD (using sysctl() now)
+
+-	archconf.c now tries to do more heuristics
+
+-	Fixed a strlen bug (introduced while removing strlen limits
+	with smake-1.2a38) that caused smake to complain about 
+	$(namepre-$(namelast)):
+	"smake: String too long, could not copy macro content for 'namepre-xxx'."
+
+-	Fixed a typo that could cause smake to dump core in some cases
+	when evaluating "$O/$@"
+
+-	Schily makefilesystem enhanced to check for extended
+	fields in struct utsname as seen e.g. in MS SFU (Interix).
+
+-	New predefined macro OSVERSION in the makefilesystem is needed
+	for SCO OpenServer 6.x support (because this uses a UnixWare
+	kernel
+
+-	Trying to support Compilation on SCO OpenServer 6.x
+
+-	Pass $(OSDEFS) to "configure" to allow correct autoconfiguration
+	with MS SFU (Interix) and cl.exe.
+
+-	$(OSDEFS) is now set from e.g. smake or the os-xxx.id rule file
+	and all further macros use OSDEFS +=
+
+-	New macro $(CC_OUTPUT_FILTER) allows to filter away the
+	unwanted file name echo from cl.exe.
+
+-	New autoconf test for $(_XEXEEXT) to check for the need to 
+	call cl.exe as "cl.exe".
+
+-	For compiling with cl.exe, smake now checks for presence off
+	SIGKILL
+
+-	New make target "shell" allows to get a $(SHELL) with the
+	same environment as used for the compiler.
+
+-	New and better autoconf handling of struct timeval in schily/time.h
+
+-	Support for x86 Darwin (intel Mac os x) in config.guess added
+
+-	Interix now uses uname -m instead of uname -p for $(OARCH)
+
+-	New shell script to support to create dependencies with 
+	cl.exe on Interix (SFU)
+
+-	smake has been enhanced to support the extended uname fields
+	in SFU. The following fields are new:
+
+	MAKE_HOST_OS  = windows 		(uname -Hs)
+	MAKE_HOST_OSREL  =      5.1 		(uname -Hr)
+	MAKE_HOST_OSVERSION  =  sp2 		(uname -Hv)
+
+	and 
+
+	MAKE_ARCH  =    intel_x86_family15_model4_stepping1 
+
+	is now used for uname -p
+
+-	Support for compiling with Sun Studio on Linux has been added
+
+-	Trying to support mingw32
+
+-	smake is now able to search for the file "defaults.smk"
+	using getexecname() or $PATH
+
+-	smake now supports parsing pattern matching default rules with no dependencies.
+
+-	New smake special macros MAKE_SHELL_FLAG and MAKE_SHELL_IFLAG
+	allow to control the shell flags that are used to call commands from
+	smake. The default is MAKE_SHELL_IFLAG=-c for "smake -i" and
+	MAKE_SHELL_FLAG=-ce for all other calls. If the special target .POSIX:
+	is present in a makefile or if smake is called with -posix, 
+	the default is MAKE_SHELL_FLAG=-c
+
+-	Several fixes for the Blastwave compile (smake -f Mcsw):
+
+	-	smake now compiles without /opt/csw/ string in the binary
+		this makes smake100% relocatable.
+
+-	Try to avoid a core dump with smake with percent default rules like:
+
+	foo%: 
+		cmd
+
+
+-	Added a workaround for the GNU make workaround into smake.
+	The GNU make workaround requires to create an otherwise useless 
+	dependency from one include file to another previously included file
+	to make GNU make believe that a rule to make the file exists at all.
+	As smake resets the state of all included targets after including them,
+	in order to force the re-evaluation of the complete rule set after
+	all  makefiles have been read, smake believed that the second file
+	did not exist because it depends on a "non-existent" file and called
+	the .INCLUDE_FILED: rule.
+
+	Smake now checks the file for existence before deciding whether to call
+	the .INCLUDE_FILED: rule.
+
+-	psmake/ scripts now auto-create the symlinks or copies to the original
+	source files.
+
+-	psmake/MAKE-sh now aborts before compilation if "configure" does
+	not create xconfig.h (e.g. because the installed compiler is defective).
+
+-	Many new makefile rules in RULES/ (e.g. for supporting the
+	ATARI ST - freemint, Haiku and Syllable).
+
+-	Make smake/archconf.c immune against sysctl() from Linux that
+	does not deliver useful information for us.
+
+-	New option "smake -C dir" for gmake compatibility, although this
+	does not introduce a needed feature. "cd dir && $(MAKE)" is not
+	worse.
+
+-	Allow smake to use "bosh" our portable Bourne Shell. This
+	helps to work around "bash" bugs in systems where /bin/sh is bash.
+
+-	New function put_env() excludes the SHELL= environment from the
+	environment variables that are imported as make macros.
+
+-	Some problems related to grant_gbuf()/growgbuf() have been fixed.
+	There have been a few cases where growgbuf() did relocate the growable
+	global general purpose buffer but the caller did not update the related
+	pointers. 
+	
+-	The schily makefilesystem now by default sets all locale related envronment
+	variables to "C" in order to avoid problems.
+
+-	Fixed a typo in include/schily/archdefs.h
+
+-	cpfiles, lnfiles and rmfiles now includes the files
+	include/schily/systeminfo.h and
+	include/schily/utsname.h
+
+-	Added GMAKE_NOWARN=true to allow to disable the gmake warning
+
+-	make smake a bit more robust in order to grant that 
+	SHELL= is always defined inside smake
+
+-	Replaced calls to tr(1) that are made by SunPro make and
+	gmake by calls to different tr(1) calls that cause less problems.
+	tr(1) oddities.
+
+-	Try to make libschily::fconv.c work on newer AIX releases
+
+-	Added support for 64 bit compilation on HP-UX.
+
+-	Added some files to start a make based compilation on VMS
+
+-	Added support for OpenVMS to config.guess
+
+-	Better autoconf test for bash also works for bash-1.x (used on VMS).
+
+-	Assed support for DragonFly BSD to config.sub
+
+-	New config test for long double
+
+-	Better floatingpoint support for HP-UX and AIX
+	We now include own macros for isinf()/isnan() for IEEE platforms that
+	do not support these functions in libc.
+
+-	The *bytes() functions are now 64 bit aware as they now habe a ssize_t
+	parameter instead of int.
+
+-	psmake/MAKE-all now works on VMS
+
+-	psmake/MAKE-sh now works on VMS
+
+-	psmake/{cpfiles,lnfiles,rmlinks} now work on VMS
+
+-	smake now supports uname -p via utsname.arch on VMS.
+
+-	smake now uses vfork() to support VMS
+
+-	The autoconf test for vfork() was changed to no longer hang on VMS
+
+
+-	Some internal smake variable names have been changed to deal with
+	the problems that arise from the fact that VMS has a non- case sensitive
+	linker.
+
+-	The smake makefile parser no longer causes a core dumps with some 
+	specific situations with backslashes in Makefiles.
+
+-	Changed psmake/cpfiles!lnfiles!rmlinks to include schily/vfork.h
+
+-	smake now also supports the "unexport" directive.
+
+-	POSIX.1-2008 is UNIX compliant again and allows to call
+	commands via "sh -ce command". Smake honors this if in POSIX 
+	mode. Note that this was already the default smake behavior in
+	Non-POSIX mode.
+
+-	Smake now treats "../name" as a valid default target name.
+
+-	The .IGNORE and .SILENT special targets now work in a POSIX compliant
+	way.
+
+-	A new special target ".SSUFFIX_RULES" allows to disable Simple Suffix
+	Rules.
+
+-	smake -p now gives more fine grained results and separates
+	Suffix rules from target rules and special targets.
+
+-	Man page enhanced, it is now complete enough for a final release.
+
+-	The makefile system no longer defines Simple Suffix Rules for smake.
+
+-	Smake now searches "makefile", "Makefile", "SMakefile" if in -posix mode,
+	smake's default is "SMakefile", "Makefile", "makefile.
+
+-	If .PRECIOUS: was specified without dependency list, all targets are 
+	handled as "PRECIOUS". This was recently added by POSIX.
+
+-	The -posix option is now propagated to sub makes via MAKEFLAGS=
+
+-	Smake now supports to be compiled in 64 bit Mode in SGI IRIX
+	using both the SGI compiler and GCC:
+
+-	The common code for Suffix macro substitution and
+	Pattern macro substitution has been fixed to correctly distibguish between
+	both methods and to no longer try to expand % in suffix macro substitutions.
+	This allows to use things like:
+
+		smake COPTX=-errwarn=%all
+
+	to work as expected.
+
+-	Smake now includes a predefined macro called "NUMBER_SIGN" that
+	is initialized with "#" to allow to use the comment character 
+	inside makefiles.
+
+-	Avoid a GCC warning with getargs.c
+
+TODO:
+	Smake would need to implement an undocumented feature from 
+	historical UNIX make implementations that is used by Xorg
+	at one place:
+
+	target: *.o
+		do-something-with *.o
+
+	Which expands *.o from the filesystem. Meanwhile, use 
+	smake -N to compile Xorg.
+
+After pattern expansion has been implemented, smake-1.2 final
+will be released.
+
+P.P.S.: As Xorg changed it's build system, we may delay this
+feature to something past 1.2-final.
+	
+
+
+WARNING: Do not use 'winzip' to extract the tar file!
+	Winzip cannot extract symbolic links correctly.
+
+Joerg

@@ -1,0 +1,36 @@
+The software in this directory tree is free software and uses
+licenses that are aproved be the OpenSource Initative
+
+	http://www.opensource.org/
+
+Not all sub-projects use the same license. Here is a list of
+sub-directories and it's related licenses:
+
+autoconf/
+	Files from the Schily Autoconf system (GPL)
+conf/
+	Support shell scripts for the Schily Makefile system (CDDL)
+DEFAULTS/
+	Default files for the Schily Makefile system (CDDL)
+DEFAULTS_ENG/
+	Default files for the Schily Makefile system (CDDL)
+inc/
+	Support C-Files for the Schily Makefile system (CDDL)
+include/
+	Support H-Files for the Schily Makefile system (CDDL)
+RULES/
+	The main part of the Schily Makefilesystem (CDDL)
+TARGETS/
+	Slot support for the Schily Makefile system (CDDL)
+TEMPLATES/
+	Template support for the Schily Makefile system (CDDL)
+
+lib/
+	parts of libschily (CDDL)
+smake/
+	The smake program (CDDL)
+
+
+For more information on the CDDL read the file	CDDL.Schily.txt
+For more information on the GPL read the file	GPL-2.0.txt
+For more information on the LGPL read the file	LGPL-2.1.txt
