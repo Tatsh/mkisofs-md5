@@ -1,0 +1,60 @@
+--------------------------------------------------------------------------------
+/* Issues: Compile cdrtools with Gcc 4.x version, error: duplicate 'unsigned' */
+--------------------------------------------------------------------------------
+
+cdrtools-2.01.md5/cdda2wav/cdda2wav.c
+cdrtools-2.01.md5/cdrecord/cdrecord.c
+
+--------------------------------------->
+
+#ifdef	__MINGW32__
+#   if __GNUC__ >= 4
+#      undef 	u_char;
+#      undef 	u_short;
+#      undef 	u_int;
+#      undef 	u_long;
+#   endif
+#endif	/* MINGW Headers */
+
+#include <windows.h>
+#undef format
+#undef interface
+
+--------------------------------------------------------------------------------
+
+cdrtools-2.01.md5/cdda2wav/sndconfig.c
+
+--------------------------------------->
+
+#ifdef	ECHO_TO_SOUNDCARD
+#   if defined(__CYGWIN32__) || defined(__MINGW32__)
+#      if __GNUC__ >= 4
+#         undef 	u_char;
+#         undef 	u_short;
+#         undef 	u_int;
+#         undef 	u_long;
+#      endif
+#      include <windows.h>
+#      include "mmsystem.h"
+#   endif
+
+--------------------------------------------------------------------------------
+
+cdrtools-2.01.md5/libscg/scsihack.c
+
+--------------------------------------->
+
+#if defined(__CYGWIN32__) || defined(__MINGW32__)
+#define	SCSI_IMPL		/* Yep, we support WNT and W9? */
+#ifdef	__MINGW32__
+#   if __GNUC__ >= 4
+#      undef 	u_char;
+#      undef 	u_short;
+#      undef 	u_int;
+#      undef 	u_long;
+#   endif
+#endif	/* MINGW Headers */
+#include "scsi-wnt.c"
+#endif
+
+--------------------------------------------------------------------------------

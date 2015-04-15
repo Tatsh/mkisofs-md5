@@ -1,0 +1,29 @@
+# @(#)rules.cnf.in	1.22 09/11/05 Copyright 1998-2009 J. Schilling
+
+EXEEXT= 
+XEXEEXT= 
+OBJEXT= o
+
+LARGEFILE_CC_OPT= 
+SUN_CC64_OPT= -m64	# Used on e.g. Solaris and Linux
+HP_CC_ANSI_OPT= 	# Used on HP-UX
+HP_CC_OPT_OPT= 	# Used on HP-UX
+HP_CC_GPROF_OPT= 	# Used on HP-UX
+
+MAY_LINUX_SRC_INCLUDE= no
+
+SCSILIB= 
+LIB_SCSI= 
+LIB_RESOLV= 
+LIB_CRYPT= -lcrypt
+LIB_INTL= 
+LIB_ICONV= 
+LIB_ACL= -lacl		# Full (test/set) ACL users like star
+LIB_ACL_TEST= -lacl	# Test only ACL users like libfind
+LIB_ATTR = -lattr
+LIB_SECDB = 
+LIB_GEN = 
+LIB_PTHREAD = -lpthread
+LIB_RT = 
+LIB_DL= -ldl
+LIB_DIR= 

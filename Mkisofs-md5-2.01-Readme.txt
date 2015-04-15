@@ -1,0 +1,130 @@
+/* --------------------------------------------------------------------
+Announcement: Written by Wwashington @ newsmth forum. 2011/03/20 20:00.
+Please keep all information if you want to keep it, or redistribute it.
+-------------------------------------------------------------------- */
+
+01) Setup Cygwin Developing Environment.
+
+Please download Cygwin-Easy-2007.03.21.iso , mount the ISO with Alcohol 
+or Virtual CloneDrive. It's the best All-in-One Cygwin Package I found.
+
+02) Setup MSYS 1.0.11, 1.016. Mount Dir.
+
+Fetch MSYS-MinGW-Gcc-3.45-4.45.7z from http://code.google.com/p/mkisofs
+Then setup at least one system. They can work together, 1.0.16 is better.
+
+cd "I:\Unix\MSYS\1.0.16"
+mkdir /extra
+cd "I:\Unix\MSYS\1.0.11"
+mkdir /extra
+mount "I:\Unix\MSYS\1.0.16\extra" /usr/local
+
+03) Run Cygwin, create symbol links to your working folder iside the MSYS.
+The reason why we choose /etc is that Virtual DVD-ROM is unable to write.
+
+ln -s "I:\Unix\MSYS\1.0.16\extra" /etc/extra
+ln -s "I:\Unix\MSYS\1.0.11\extra" /etc/extrb
+mount "I:\Unix\MSYS\1.0.16\extra" /usr/local
+
+04) Compile Smake and P7zip Tools, they will help you Make and Decompress.
+After compiling, you may copy Binaries and Cygwin1.dll to /usr/local/bin.
+For your convienence, I already built them and put them in Cygwin Binary.
+
+cd /etc/extra/src
+tar -jxvf ../zlib/smake-1.2.1.tar.bz2
+cd smake-1.2.1/
+make
+
+cd /etc/extra/src
+tar -jxvf ../zlib/p7zip_9.20.1_src_all.tar.bz2
+cd p7zip_9.20.1/
+make
+
+05) If you have original src, repack it. Otherwise the patch process will
+fail. The "c" funtion vs "h" option in tar command can strip symbol link.
+For your convienence, I already built it. You can try when you have time.
+
+cd /etc/extra/src
+rm -Rf cdrtools-2.01/
+tar -zxvf ../zlib/cdrtools-2.01-origin.src.tar.gz
+tar -zchf cdrtools-2.01-origin.src.tar.gz cdrtools-2.01
+mv -f cdrtools-2.01-origin.src.tar.gz ../zlib
+
+06) Now Start to Build the Binary in Cygwin. Good Luck & Have a Good Tea!
+The nls patch and nls-2-md5 patch is working, but the program have small
+bugs. The mkisofs program will generate "Rock Ridge" info without asking.
+
+cd /etc/extra/src
+rm -Rf cdrtools-2.01/
+rm -Rf cdrtools-2.01.md5/
+tar -zxvf ../zlib/cdrtools-2.01-origin.src.tar.gz
+mv cdrtools-2.01 cdrtools-2.01.md5
+cd cdrtools-2.01.md5/
+zcat ../../zlib/noboru_nls_patch_20041227.txt.gz | patch -p1
+cat  ../../zlib/cdrtools-2.01.nls-2-md5.src.diff | patch -p1
+smake
+
+07) Now Start to Build the Binary in MinGW. Good Luck & Have a Good Tea!
+The nls patch and nls-2-md5 patch is working, but the program have small
+bugs. The mkisofs program will generate "Rock Ridge" info without asking.
+
+echo "/* Usage Tip: Please Run tar in Cygwin, it's much safer for you */"
+cd /etc/extra/src
+rm -Rf cdrtools-2.01/
+rm -Rf cdrtools-2.01.w32/
+tar -zxvf ../zlib/cdrtools-2.01-origin.src.tar.gz
+mv cdrtools-2.01 cdrtools-2.01.w32
+cd cdrtools-2.01.w32/
+zcat ../../zlib/noboru_nls_patch_20041227.txt.gz | patch -p1
+cat  ../../zlib/cdrtools-2.01.nls-2-md5.src.diff | patch -p1
+
+echo "/* Change To: MSYS 1.0.16 + MinGW Gcc 3.4.5 Environment , Build */"
+make
+
+08) Find the Binaries you want, copy it to upper folder, that's well done.
+Please run explorer in your Win32 Desktop, then copy & paste to anywhere.
+
+find . | grep exe | grep -v fexec
+ls -la `find . | grep mkisofs.exe`
+`find . | grep mkisofs.exe` --version
+cp -pf `find . | grep mkisofs.exe` ..
+
+09) Original Patch process base on bootcd.ru Fix, without nls-2-md5 Patch.
+I merge NLS-CJK & MD5-Opt Patch, then fix bugs, finally create new Patch.
+
+cd /etc/extra/src
+rm -Rf cdrtools-2.01/
+rm -Rf cdrtools-2.01.nls/
+tar -zxvf ../zlib/cdrtools-2.01-origin.src.tar.gz
+mv cdrtools-2.01 cdrtools-2.01.nls
+cd cdrtools-2.01.nls/
+zcat ../../zlib/noboru_nls_patch_20041227.txt.gz | patch -p1
+
+cd /etc/extra/src
+rm -Rf cdrtools-2.01/
+rm -Rf cdrtools-2.01.md5/
+tar -zxvf ../zlib/cdrtools-2.01-origin.src.tar.gz
+mv cdrtools-2.01 cdrtools-2.01.md5
+cd cdrtools-2.01.md5/
+zcat ../../zlib/noboru_nls_patch_20041227.txt.gz | patch -p1
+cat  ../../zlib/cdrtools-2.01-bootcd.ru-src.diff | patch -p1
+
+cp -pf -R ../update/cdrtools-2.0.1/* .
+find . | grep rej  | xargs -i echo {}
+find . | grep rej  | xargs -i  rm {}
+find . | grep orig | xargs -i echo {}
+find . | grep orig | xargs -i  rm {}
+cd /etc/extra/src
+diff -rupN cdrtools-2.01.nls cdrtools-2.01.md5 > cdrtools-2.01.nls-2-md5.src.diff
+
+10) Reference websites of all contributors for mkisofs-cjk-md5 version.
+
+A) Japan NOBORU (Thanks for providing NLS-CJK Patch) -->
+   http://www.geocities.co.jp/SiliconValley/3657/mkisofs_patch/
+
+B) Alex Kopylov (Thanks for providing MD5-Opt Patch) -->
+   http://fy.chalmers.se/~appro/linux/DVD+RW/tools/win32/
+
+C) Jacky Zhong (Wwashington, Author of mkisofs-cjk-md5) -->
+   http://code.google.com/p/mkisofs-md5/
+   http://sourceforge.net/projects/mkisofs-md5/

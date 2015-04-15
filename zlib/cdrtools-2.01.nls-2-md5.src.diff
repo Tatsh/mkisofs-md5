@@ -1,0 +1,4193 @@
+diff -rupN cdrtools-2.01.nls/01_Readme/GCC4-Unsigned.txt cdrtools-2.01.md5/01_Readme/GCC4-Unsigned.txt
+--- cdrtools-2.01.nls/01_Readme/GCC4-Unsigned.txt	1970-01-01 08:00:00.000000000 +0800
++++ cdrtools-2.01.md5/01_Readme/GCC4-Unsigned.txt	2011-03-20 15:00:00.000000000 +0800
+@@ -0,0 +1,60 @@
++--------------------------------------------------------------------------------
++/* Issues: Compile cdrtools with Gcc 4.x version, error: duplicate 'unsigned' */
++--------------------------------------------------------------------------------
++
++cdrtools-2.01.md5/cdda2wav/cdda2wav.c
++cdrtools-2.01.md5/cdrecord/cdrecord.c
++
++--------------------------------------->
++
++#ifdef	__MINGW32__
++#   if __GNUC__ >= 4
++#      undef 	u_char;
++#      undef 	u_short;
++#      undef 	u_int;
++#      undef 	u_long;
++#   endif
++#endif	/* MINGW Headers */
++
++#include <windows.h>
++#undef format
++#undef interface
++
++--------------------------------------------------------------------------------
++
++cdrtools-2.01.md5/cdda2wav/sndconfig.c
++
++--------------------------------------->
++
++#ifdef	ECHO_TO_SOUNDCARD
++#   if defined(__CYGWIN32__) || defined(__MINGW32__)
++#      if __GNUC__ >= 4
++#         undef 	u_char;
++#         undef 	u_short;
++#         undef 	u_int;
++#         undef 	u_long;
++#      endif
++#      include <windows.h>
++#      include "mmsystem.h"
++#   endif
++
++--------------------------------------------------------------------------------
++
++cdrtools-2.01.md5/libscg/scsihack.c
++
++--------------------------------------->
++
++#if defined(__CYGWIN32__) || defined(__MINGW32__)
++#define	SCSI_IMPL		/* Yep, we support WNT and W9? */
++#ifdef	__MINGW32__
++#   if __GNUC__ >= 4
++#      undef 	u_char;
++#      undef 	u_short;
++#      undef 	u_int;
++#      undef 	u_long;
++#   endif
++#endif	/* MINGW Headers */
++#include "scsi-wnt.c"
++#endif
++
++--------------------------------------------------------------------------------
+\ No newline at end of file
+diff -rupN cdrtools-2.01.nls/RULES/i386-mingw32_nt-gcc.rul cdrtools-2.01.md5/RULES/i386-mingw32_nt-gcc.rul
+--- cdrtools-2.01.nls/RULES/i386-mingw32_nt-gcc.rul	2004-07-11 06:05:35.000000000 +0800
++++ cdrtools-2.01.md5/RULES/i386-mingw32_nt-gcc.rul	2011-03-20 15:00:15.078125000 +0800
+@@ -54,6 +54,7 @@ FLOAT_OPTIONS=	
+ 
+ CC=		@echo "	==> COMPILING \"$@\""; gcc
+ LDCC=		@echo "	==> LINKING \"$@\""; gcc
++#LDCC=		@echo "	==> LINKING \"$@\""; gcc -Wl,--strip-all
+ DYNLD=		@echo "	==> LINKING dynamic library \"$@\""; gcc
+ RANLIB=		@echo "	==> RANDOMIZING ARCHIVE \"$@\""; true
+ ARFLAGS=	cr
+diff -rupN cdrtools-2.01.nls/RULES/i486-mingw32_nt-gcc.rul cdrtools-2.01.md5/RULES/i486-mingw32_nt-gcc.rul
+--- cdrtools-2.01.nls/RULES/i486-mingw32_nt-gcc.rul	2004-07-11 06:05:35.000000000 +0800
++++ cdrtools-2.01.md5/RULES/i486-mingw32_nt-gcc.rul	2011-03-20 15:00:15.093750000 +0800
+@@ -54,6 +54,7 @@ FLOAT_OPTIONS=	
+ 
+ CC=		@echo "	==> COMPILING \"$@\""; gcc
+ LDCC=		@echo "	==> LINKING \"$@\""; gcc
++#LDCC=		@echo "	==> LINKING \"$@\""; gcc -Wl,--strip-all
+ DYNLD=		@echo "	==> LINKING dynamic library \"$@\""; gcc
+ RANLIB=		@echo "	==> RANDOMIZING ARCHIVE \"$@\""; true
+ ARFLAGS=	cr
+diff -rupN cdrtools-2.01.nls/RULES/i586-mingw32_nt-gcc.rul cdrtools-2.01.md5/RULES/i586-mingw32_nt-gcc.rul
+--- cdrtools-2.01.nls/RULES/i586-mingw32_nt-gcc.rul	2004-07-11 06:05:35.000000000 +0800
++++ cdrtools-2.01.md5/RULES/i586-mingw32_nt-gcc.rul	2011-03-20 15:00:15.093750000 +0800
+@@ -54,6 +54,7 @@ FLOAT_OPTIONS=	
+ 
+ CC=		@echo "	==> COMPILING \"$@\""; gcc
+ LDCC=		@echo "	==> LINKING \"$@\""; gcc
++#LDCC=		@echo "	==> LINKING \"$@\""; gcc -Wl,--strip-all
+ DYNLD=		@echo "	==> LINKING dynamic library \"$@\""; gcc
+ RANLIB=		@echo "	==> RANDOMIZING ARCHIVE \"$@\""; true
+ ARFLAGS=	cr
+diff -rupN cdrtools-2.01.nls/RULES/i686-mingw32_nt-gcc.rul cdrtools-2.01.md5/RULES/i686-mingw32_nt-gcc.rul
+--- cdrtools-2.01.nls/RULES/i686-mingw32_nt-gcc.rul	2004-07-11 06:05:35.000000000 +0800
++++ cdrtools-2.01.md5/RULES/i686-mingw32_nt-gcc.rul	2011-03-20 15:00:15.109375000 +0800
+@@ -54,6 +54,7 @@ FLOAT_OPTIONS=	
+ 
+ CC=		@echo "	==> COMPILING \"$@\""; gcc
+ LDCC=		@echo "	==> LINKING \"$@\""; gcc
++#LDCC=		@echo "	==> LINKING \"$@\""; gcc -Wl,--strip-all
+ DYNLD=		@echo "	==> LINKING dynamic library \"$@\""; gcc
+ RANLIB=		@echo "	==> RANDOMIZING ARCHIVE \"$@\""; true
+ ARFLAGS=	cr
+diff -rupN cdrtools-2.01.nls/RULES/i786-mingw32_nt-gcc.rul cdrtools-2.01.md5/RULES/i786-mingw32_nt-gcc.rul
+--- cdrtools-2.01.nls/RULES/i786-mingw32_nt-gcc.rul	2004-07-11 06:05:35.000000000 +0800
++++ cdrtools-2.01.md5/RULES/i786-mingw32_nt-gcc.rul	2011-03-20 15:00:15.125000000 +0800
+@@ -54,6 +54,7 @@ FLOAT_OPTIONS=	
+ 
+ CC=		@echo "	==> COMPILING \"$@\""; gcc
+ LDCC=		@echo "	==> LINKING \"$@\""; gcc
++#LDCC=		@echo "	==> LINKING \"$@\""; gcc -Wl,--strip-all
+ DYNLD=		@echo "	==> LINKING dynamic library \"$@\""; gcc
+ RANLIB=		@echo "	==> RANDOMIZING ARCHIVE \"$@\""; true
+ ARFLAGS=	cr
+diff -rupN cdrtools-2.01.nls/RULES/os-mingw32_95-4.0.id cdrtools-2.01.md5/RULES/os-mingw32_95-4.0.id
+--- cdrtools-2.01.nls/RULES/os-mingw32_95-4.0.id	2004-07-11 19:53:22.000000000 +0800
++++ cdrtools-2.01.md5/RULES/os-mingw32_95-4.0.id	2011-03-20 15:00:15.125000000 +0800
+@@ -1,4 +1,4 @@
+-#ident "@(#)os-mingw_95-4.0.id	1.1 04/07/10 "
++#ident "@(#)os-mingw32_95-4.0.id	1.1 04/07/10 "
+ ###########################################################################
+ #
+ # OS specific MACRO definitions for Win32/Mingw32
+diff -rupN cdrtools-2.01.nls/RULES/os-mingw32_98-4.0.id cdrtools-2.01.md5/RULES/os-mingw32_98-4.0.id
+--- cdrtools-2.01.nls/RULES/os-mingw32_98-4.0.id	2004-07-11 19:53:22.000000000 +0800
++++ cdrtools-2.01.md5/RULES/os-mingw32_98-4.0.id	2011-03-20 15:00:15.140625000 +0800
+@@ -1,4 +1,4 @@
+-#ident "@(#)os-mingw_98-4.0.id	1.1 04/07/10 "
++#ident "@(#)os-mingw32_98-4.0.id	1.1 04/07/10 "
+ ###########################################################################
+ #
+ # OS specific MACRO definitions for Win32/Mingw32
+diff -rupN cdrtools-2.01.nls/RULES/os-mingw32_98-4.10.id cdrtools-2.01.md5/RULES/os-mingw32_98-4.10.id
+--- cdrtools-2.01.nls/RULES/os-mingw32_98-4.10.id	2004-07-11 19:53:22.000000000 +0800
++++ cdrtools-2.01.md5/RULES/os-mingw32_98-4.10.id	2011-03-20 15:00:15.140625000 +0800
+@@ -1,4 +1,4 @@
+-#ident "@(#)os-mingw_98-4.10.id	1.1 04/07/10 "
++#ident "@(#)os-mingw32_98-4.10.id	1.1 04/07/10 "
+ ###########################################################################
+ #
+ # OS specific MACRO definitions for Win32/Mingw32
+diff -rupN cdrtools-2.01.nls/RULES/os-mingw32_me-4.90.id cdrtools-2.01.md5/RULES/os-mingw32_me-4.90.id
+--- cdrtools-2.01.nls/RULES/os-mingw32_me-4.90.id	2004-07-11 19:53:22.000000000 +0800
++++ cdrtools-2.01.md5/RULES/os-mingw32_me-4.90.id	2011-03-20 15:00:15.156250000 +0800
+@@ -1,4 +1,4 @@
+-#ident "@(#)os-mingw_me-4.90.id	1.1 04/07/10 "
++#ident "@(#)os-mingw32_me-4.90.id	1.1 04/07/10 "
+ ###########################################################################
+ #
+ # OS specific MACRO definitions for Win32/Mingw32
+diff -rupN cdrtools-2.01.nls/TARGETS/16libmgw32 cdrtools-2.01.md5/TARGETS/16libmgw32
+--- cdrtools-2.01.nls/TARGETS/16libmgw32	1970-01-01 08:00:00.000000000 +0800
++++ cdrtools-2.01.md5/TARGETS/16libmgw32	2011-03-20 15:00:15.218750000 +0800
+@@ -0,0 +1 @@
++Win32/Mingw32 stuff
+diff -rupN cdrtools-2.01.nls/cdda2wav/cdda2wav.c cdrtools-2.01.md5/cdda2wav/cdda2wav.c
+--- cdrtools-2.01.nls/cdda2wav/cdda2wav.c	2004-08-24 23:06:14.000000000 +0800
++++ cdrtools-2.01.md5/cdda2wav/cdda2wav.c	2011-03-20 15:00:00.000000000 +0800
+@@ -498,6 +498,10 @@ static void CloseAll ()
+ 	}
+ 
+ 
++#ifndef	__MINGW32__
++/*
++ * Mingw32: wait() is missing, fork() is missing too, global.have_forked != 1
++ */
+ 	if (global.have_forked == 1) {
+ #ifdef DEBUG_CLEANUP
+ 		fprintf(stderr, "Parent wait for child death, \n");
+@@ -524,6 +528,7 @@ static void CloseAll ()
+ 		fprintf(stderr, "\nW Parent child death, state:%d\n", chld_return_status);
+ #endif
+ 	}
++#endif
+ 
+ #ifdef GPROF
+ 	rename("gmon.out", "gmon.child");
+@@ -578,6 +583,10 @@ void FatalError (szMessage, va_alist)
+ 
+ 	va_end(marker);
+ 
++#ifndef	__MINGW32__
++/*
++ * Mingw32: kill() is missing, fork() is missing too, child_pid == -2
++ */
+ 	if (child_pid >= 0) {
+ 		if (child_pid == 0) {
+ 			/* kill the parent too */
+@@ -586,6 +595,7 @@ void FatalError (szMessage, va_alist)
+ 			kill(child_pid, SIGINT);
+ 		}
+ 	}
++#endif
+ 	exit (1);
+ }
+ 
+@@ -996,7 +1006,7 @@ switch_to_realtime_priority()
+ 	}
+ }
+ #else
+-#if defined(__CYGWIN32__)
++#if defined(__CYGWIN32__) || defined(__MINGW32__)
+ 
+ /*
+  * NOTE: Base.h from Cygwin-B20 has a second typedef for BOOL.
+@@ -1016,6 +1026,16 @@ switch_to_realtime_priority()
+  */
+ #define	BOOL	WBOOL		/* This is the Win BOOL		*/
+ #define	format	__format	/* Avoid format parameter hides global ... */
++
++#ifdef	__MINGW32__
++#   if __GNUC__ >= 4
++#      undef 	u_char;
++#      undef 	u_short;
++#      undef 	u_int;
++#      undef 	u_long;
++#   endif
++#endif	/* MINGW Headers */
++
+ #include <windows.h>
+ #undef format
+ #undef interface
+@@ -1089,10 +1109,15 @@ static void set_nonforked(status)
+ #if defined DEBUG_CLEANUP
+ fprintf( stderr, "SIGPIPE received from %s\n.", child_pid == 0 ? "Child" : "Parent");
+ #endif
++#ifndef	__MINGW32__
++/*
++ * Mingw32: kill() is missing, fork() is missing too, child_pid == -2
++ */
+ 	if (child_pid == 0)
+ 		kill(getppid(), SIGINT);
+ 	else
+ 		kill(child_pid, SIGINT);
++#endif
+ 	exit(SIGPIPE_ERROR);
+ }
+ 
+@@ -1583,10 +1608,15 @@ if (left_in_track < 0) {
+ 		if ( SaveBuffer ( p->data + current_offset/4,
+ 			 how_much,
+ 			 &nSamplesDone) ) {
++#ifndef	__MINGW32__
++/*
++ * Mingw32: kill() is missing, fork() is missing too, global.have_forked != 1
++ */
+ 			if (global.have_forked == 1) {
+ 				/* kill parent */
+ 				kill(getppid(), SIGINT);
+ 			}
++#endif
+ 			exit(WRITE_ERROR);
+ 		}
+ 
+@@ -2061,7 +2091,17 @@ int main( argc, argv )
+ 
+   int_name = DEF_INTERFACE;
+   audio_type = AUDIOTYPE;
+-  save_args(argc, argv);
++#ifdef	__DJGPP__
++	/* Get time zone information from TZ environment variable */
++	tzset();
++#endif
++#ifdef	__MINGW32__
++	__mgw32__init(argv[0]);
++#endif
++   save_args(argc, argv);
++#if	defined(__DJGPP__) || defined(__MINGW32__)
++	set_progname("cdda2wav");
++#endif
+ 
+   /* init global variables */
+   init_globals();
+@@ -2487,11 +2527,17 @@ Rate   Divider      Rate   Divider      
+ #define SETSIGHAND(PROC, SIG, SIGNAME) if (signal(SIG, PROC) == SIG_ERR) \
+ 	{ fprintf(stderr, "cannot set signal %s handler\n", SIGNAME); exit(SETSIG_ERROR); }
+     SETSIGHAND(exit_wrapper, SIGINT, "SIGINT")
++#ifdef	SIGQUIT	/* Mingw32 has no SIGQUIT */
+     SETSIGHAND(exit_wrapper, SIGQUIT, "SIGQUIT")
++#endif
+     SETSIGHAND(exit_wrapper, SIGTERM, "SIGTERM")
++#ifdef	SIGHUP	/* Mingw32 has no SIGTERM */
+     SETSIGHAND(exit_wrapper, SIGHUP, "SIGHUP")
++#endif
+ 
++#ifdef	SIGPIPE	/* Mingw32 has no SIGPIPE */
+     SETSIGHAND(set_nonforked, SIGPIPE, "SIGPIPE")
++#endif
+ 
+   /* setup interface and open cdrom device */
+   /* request sychronization facilities and shared memory */
+diff -rupN cdrtools-2.01.nls/cdda2wav/defaults.c cdrtools-2.01.md5/cdda2wav/defaults.c
+--- cdrtools-2.01.nls/cdda2wav/defaults.c	2004-03-02 09:10:32.000000000 +0800
++++ cdrtools-2.01.md5/cdda2wav/defaults.c	2011-03-20 15:00:13.625000000 +0800
+@@ -42,6 +42,35 @@ LOCAL	char *	strsv		__PR((char *s));
+ LOCAL int
+ open_cdrdefaults()
+ {
++#if	defined(__DJGPP__) || defined(__MINGW32__)
++
++	char	*ininame = "cdrecord.ini";
++	char	*defltname = ininame;
++	int	ret = -1;
++	char	*av0 = saved_av0();
++	char	*av0_last_slash;
++
++	if (av0)
++		av0_last_slash = strrchr(av0, '/');
++
++	if (av0 && av0_last_slash) {
++
++		int	av0_path_len = (av0_last_slash - av0) + 1;
++
++		defltname = malloc(av0_path_len + strlen(ininame) + 1);
++		strncpy(defltname, av0, av0_path_len);
++		strcpy(defltname + av0_path_len, ininame);
++	}
++
++	if (defltname) {
++		ret = defltopen(defltname);
++		if (defltname != ininame)
++			free(defltname);
++	}
++
++	if (!ret)
++		return (0);
++#endif
+ 	/*
+ 	 * WARNING you are only allowed to change this filename if you also
+ 	 * change the documentation and add a statement that makes clear
+diff -rupN cdrtools-2.01.nls/cdda2wav/interface.c cdrtools-2.01.md5/cdda2wav/interface.c
+--- cdrtools-2.01.nls/cdda2wav/interface.c	2004-08-05 17:57:27.000000000 +0800
++++ cdrtools-2.01.md5/cdda2wav/interface.c	2011-03-20 15:00:13.671875000 +0800
+@@ -45,7 +45,9 @@ static char     sccsid[] =
+ #include <schily.h>
+ #include <device.h>
+ 
++#ifdef	HAVE_SYS_IOCTL_H	/* Mingw32 has no sys/ioctl.h */
+ #include <sys/ioctl.h>
++#endif
+ #include <statdefs.h>
+ 
+ 
+@@ -528,6 +530,13 @@ static int OpenCdRom ( pdev_name )
+ 		exit(NO_ERROR);
+ 	}
+ 
++#ifdef	__MINGW32__
++/* FIXME: cdda2wav without dev=x,x,x says: "cdda2wav: No error. Cannot send SCSI cmd via ioctl" */
++	scgp = NULL;
++	errstr[0] = '\0';
++	seterrno(ENOENT);
++	if (pdev_name)
++#endif
+ 	/* device name, debug, verboseopen */
+ 	scgp = scg_open(pdev_name, errstr, sizeof(errstr), 0, 0);
+ 
+@@ -535,8 +544,15 @@ static int OpenCdRom ( pdev_name )
+ 		int	err = geterrno();
+ 
+ 		errmsgno(err, "%s%sCannot open SCSI driver.\n", errstr, errstr[0]?". ":"");
++#ifndef	__MINGW32__
++/*
++ * Mingw32 has no UIDs and GIDs
++ */
+ 		errmsgno(EX_BAD, "For possible targets try 'cdda2wav -scanbus'.%s\n",
+ 					geteuid() ? " Make sure you are root.":"");
++#else
++		errmsgno(EX_BAD, "For possible targets try 'cdda2wav -scanbus'.\n");
++#endif
+         	dontneedgroup();
+         	dontneedroot();
+ #if defined(sun) || defined(__sun)
+diff -rupN cdrtools-2.01.nls/cdda2wav/ioctl.c cdrtools-2.01.md5/cdda2wav/ioctl.c
+--- cdrtools-2.01.nls/cdda2wav/ioctl.c	2003-12-28 00:29:28.000000000 +0800
++++ cdrtools-2.01.md5/cdda2wav/ioctl.c	2011-03-20 15:00:13.703125000 +0800
+@@ -24,7 +24,9 @@ static char     sccsid[] =
+ #include <fctldefs.h>
+ #include <assert.h>
+ 
++#ifdef	HAVE_SYS_IOCTL_H	/* Mingw32 has no sys/ioctl.h */
+ #include <sys/ioctl.h>
++#endif
+ #include <statdefs.h>
+ #include <schily.h>
+ #include <device.h>
+diff -rupN cdrtools-2.01.nls/cdda2wav/semshm.c cdrtools-2.01.md5/cdda2wav/semshm.c
+--- cdrtools-2.01.nls/cdda2wav/semshm.c	2003-08-30 05:23:16.000000000 +0800
++++ cdrtools-2.01.md5/cdda2wav/semshm.c	2011-03-20 15:00:13.734375000 +0800
+@@ -183,6 +183,11 @@ int flush_buffers()
+ int pipefdp2c[2];
+ int pipefdc2p[2];
+ 
++#ifdef	__MINGW32__
++#include <fcntl.h>
++#define	pipe(a)		_pipe(a, 512, O_BINARY)
++#endif
++
+ void init_pipes()
+ {
+   if (pipe(pipefdp2c) < 0) {
+diff -rupN cdrtools-2.01.nls/cdda2wav/setuid.c cdrtools-2.01.md5/cdda2wav/setuid.c
+--- cdrtools-2.01.nls/cdda2wav/setuid.c	2004-08-19 18:54:34.000000000 +0800
++++ cdrtools-2.01.md5/cdda2wav/setuid.c	2011-03-20 15:00:13.750000000 +0800
+@@ -47,6 +47,10 @@ static gid_t effective_gid = (gid_t) (-1
+ 
+ void initsecurity()
+ {
++#ifndef	__MINGW32__
++/*
++ * Mingw32 has no UIDs and GIDs (and alarm() too)
++ */
+     int leffective_uid;
+ 
+     alarm(0);			/* can be inherited from parent process */
+@@ -63,6 +67,7 @@ void initsecurity()
+     effective_gid = getegid();
+     dontneedroot();
+     dontneedgroup();
++#endif
+ }
+ 
+ /* Temporarily gain root privileges. */
+@@ -76,6 +81,10 @@ int	setegid __PR((gid_t guid));
+ void needroot(necessary)
+ 	int necessary;
+ {
++#ifndef	__MINGW32__
++/*
++ * Mingw32 has no UIDs and GIDs
++ */
+ #ifdef DEBUG
+     fprintf(stderr, "call to     needroot (_euid_=%d, uid=%d), current=%d/%d, pid=%d\n",
+ 			effective_uid, real_uid, geteuid(), getuid(), getpid());
+@@ -115,12 +124,17 @@ void needroot(necessary)
+     fprintf(stderr, "exit of     needroot (_euid_=%d, uid=%d), current=%d/%d, pid=%d\n",
+ 			effective_uid, real_uid, geteuid(), getuid(), getpid());
+ #endif
++#endif
+ }
+ 
+ /* Temporarily drop root privileges.  */
+ 
+ void dontneedroot()
+ {
++#ifndef	__MINGW32__
++/*
++ * Mingw32 has no UIDs and GIDs
++ */
+ #ifdef DEBUG
+     fprintf(stderr, "call to dontneedroot (_euid_=%d, uid=%d), current=%d/%d, pid=%d\n",
+ 			effective_uid, real_uid, geteuid(), getuid(), getpid());
+@@ -154,12 +168,17 @@ void dontneedroot()
+ #endif
+ 	exit(PERM_ERROR);
+     }
++#endif
+ }
+ 
+ /* Permanently drop root privileges.  */
+ 
+ void neverneedroot()
+ {
++#ifndef	__MINGW32__
++/*
++ * Mingw32 has no UIDs and GIDs
++ */
+ #ifdef DEBUG
+     fprintf(stderr, "call to neverneedroot (_euid_=%d, uid=%d), current=%d/%d, pid=%d\n",
+ 			effective_uid, real_uid, geteuid(), getuid(), getpid());
+@@ -199,6 +218,7 @@ void neverneedroot()
+     fprintf(stderr, "exit of neverneedroot (_euid_=%d, uid=%d), current=%d/%d, pid=%d\n",
+ 			effective_uid, real_uid, geteuid(), getuid(), getpid());
+ #endif
++#endif
+ }
+ 
+ /* Temporarily gain group privileges. */
+@@ -206,6 +226,10 @@ void neverneedroot()
+ void needgroup(necessary)
+ 	int necessary;
+ {
++#ifndef	__MINGW32__
++/*
++ * Mingw32 has no UIDs and GIDs
++ */
+ #ifdef DEBUG
+     fprintf(stderr, "call to     needgroup (egid=%d, gid=%d), current=%d/%d, pid=%d\n",
+ 			effective_gid, real_gid, getegid(), getgid(), getpid());
+@@ -234,12 +258,17 @@ void needgroup(necessary)
+ 	fprintf(stderr, "Fatal error:  did not get group privilege.\n");
+ 	exit(PERM_ERROR);
+     }
++#endif
+ }
+ 
+ /* Temporarily drop group privileges.  */
+ 
+ void dontneedgroup()
+ {
++#ifndef	__MINGW32__
++/*
++ * Mingw32 has no UIDs and GIDs
++ */
+ #ifdef DEBUG
+     fprintf(stderr, "call to dontneedgroup (egid=%d, gid=%d), current=%d/%d, pid=%d\n",
+ 			effective_gid, real_gid, getegid(), getgid(), getpid());
+@@ -270,12 +299,17 @@ void dontneedgroup()
+     fprintf(stderr, "exit if dontneedgroup (egid=%d, gid=%d), current=%d/%d, pid=%d\n",
+ 			effective_gid, real_gid, getegid(), getgid(), getpid());
+ #endif
++#endif
+ }
+ 
+ /* Permanently drop group privileges.  */
+ 
+ void neverneedgroup()
+ {
++#ifndef	__MINGW32__
++/*
++ * Mingw32 has no UIDs and GIDs
++ */
+ #ifdef DEBUG
+     fprintf(stderr, "call to neverneedgroup (egid=%d, gid=%d), current=%d/%d, pid=%d\n",
+ 			effective_gid, real_gid, getegid(), getgid(), getpid());
+@@ -307,6 +341,7 @@ void neverneedgroup()
+ 	exit(PERM_ERROR);
+     }
+     effective_gid = real_gid;
++#endif
+ }
+ 
+ #if defined (HPUX)
+diff -rupN cdrtools-2.01.nls/cdda2wav/sndconfig.c cdrtools-2.01.md5/cdda2wav/sndconfig.c
+--- cdrtools-2.01.nls/cdda2wav/sndconfig.c	2004-08-03 05:14:28.000000000 +0800
++++ cdrtools-2.01.md5/cdda2wav/sndconfig.c	2011-03-20 15:00:00.000000000 +0800
+@@ -11,7 +11,9 @@ static char     sccsid[] =
+ #include <strdefs.h>
+ #include <fctldefs.h>
+ #include <unixstd.h>
++#ifdef	HAVE_SYS_IOCTL_H	/* Mingw32 has no sys/ioctl.h */
+ #include <sys/ioctl.h>
++#endif
+ 
+ #if	!defined __CYGWIN32__
+ # include <timedefs.h>
+@@ -45,7 +47,13 @@ static char     sccsid[] =
+ #include "sndconfig.h"
+ 
+ #ifdef	ECHO_TO_SOUNDCARD
+-#   if defined(__CYGWIN32__)
++#   if defined(__CYGWIN32__) || defined(__MINGW32__)
++#      if __GNUC__ >= 4
++#         undef 	u_char;
++#         undef 	u_short;
++#         undef 	u_int;
++#         undef 	u_long;
++#      endif
+ #      include <windows.h>
+ #      include "mmsystem.h"
+ #   endif
+@@ -79,11 +87,19 @@ int set_snd_device(devicename)
+ 	return 0;
+ }
+ 
+-#   if	defined __CYGWIN32__
++#   if	defined __CYGWIN32__ || defined __MINGW32__
+ static HWAVEOUT	DeviceID;
++#ifndef	__MINGW32__
+ #      define WAVEHDRS	3
++#else
++#      define WAVEHDRS	75	/* "anti-shock" for 'sectors-per-request=1' */
++#endif
+ static WAVEHDR	wavehdr[WAVEHDRS];
+ static unsigned lastwav = 0;
++#ifdef	__MINGW32__
++static unsigned wavehdrinuse = 0;
++static HANDLE waveOutEvent;
++#endif
+ 
+ static int check_winsound_caps __PR((int bits, double rate, int channels));
+ 
+@@ -124,6 +140,28 @@ static int check_winsound_caps(bits, rat
+ 
+   return result;
+ }
++
++#ifdef	__MINGW32__
++
++static void CALLBACK waveOutProc __PR((HWAVEOUT hwo, UINT uMsg, DWORD dwInstance, DWORD dwParam1, DWORD dwParam2));
++
++static void CALLBACK waveOutProc(hwo, uMsg, dwInstance, dwParam1, dwParam2)
++	HWAVEOUT hwo;
++	UINT uMsg;
++	DWORD dwInstance;
++	DWORD dwParam1;
++	DWORD dwParam2;
++{
++	if (uMsg == WOM_DONE) {
++		if (wavehdrinuse) {
++			wavehdrinuse--;
++			SetEvent(waveOutEvent);
++		}
++	}
++}
++
++#endif
++
+ #   endif /* defined CYGWIN */
+ #endif /* defined ECHO_TO_SOUNDCARD */
+ 
+@@ -251,7 +289,7 @@ int init_soundcard(rate, bits)
+ #   endif
+     }
+ #  else /* SUN audio */
+-#   if defined(__CYGWIN32__)
++#   if defined(__CYGWIN32__) || defined(__MINGW32__)
+     /* Windows sound info */
+ 
+     MMRESULT mmres;
+@@ -280,7 +318,12 @@ int init_soundcard(rate, bits)
+     wavform.nBlockAlign = global.channels * (wavform.wBitsPerSample / 8);
+   
+     DeviceID = 0;
++#ifndef	__MINGW32__
+     mmres = waveOutOpen(&DeviceID, WAVE_MAPPER, &wavform, (unsigned long)WIN_CallBack, 0, CALLBACK_FUNCTION);
++#else
++    waveOutEvent = CreateEvent(NULL, TRUE, FALSE, NULL);
++    mmres = waveOutOpen(&DeviceID, WAVE_MAPPER, &wavform, (DWORD)&waveOutProc, 0, CALLBACK_FUNCTION);
++#endif
+     if (mmres) {
+ 	char erstr[329];
+ 
+@@ -315,7 +358,11 @@ int init_soundcard(rate, bits)
+ 	    }
+ 
+ 	    wavehdr[i].dwLoops = 0;
++#ifndef	__MINGW32__
+ 	    wavehdr[i].dwFlags = WHDR_DONE;
++#else
++	    wavehdr[i].dwFlags |= WHDR_DONE;
++#endif
+ 	    wavehdr[i].dwBufferLength = 0;
+ 	}
+     }
+@@ -488,8 +535,11 @@ int close_snd_device ()
+ 	return 0;
+ #else
+ 
+-# if	defined __CYGWIN32__
++# if	defined __CYGWIN32__ || defined __MINGW32__
+ 	waveOutReset(0);
++#ifdef	__MINGW32__
++	CloseHandle(waveOutEvent);
++#endif
+ 	return waveOutClose(DeviceID);
+ # else /* !Cygwin32 */
+ 
+@@ -519,9 +569,16 @@ int write_snd_device (buffer, todo)
+ {
+ 	int result = 0;
+ #ifdef	ECHO_TO_SOUNDCARD
+-#if	defined __CYGWIN32__
++#if	defined __CYGWIN32__ || defined __MINGW32__
+ 	MMRESULT mmres;
+ 
++#ifdef	__MINGW32__
++	while (wavehdrinuse >= WAVEHDRS) {
++		WaitForSingleObject(waveOutEvent, INFINITE);
++		ResetEvent(waveOutEvent);
++	}
++	wavehdrinuse++;
++#endif
+ 	wavehdr[lastwav].dwBufferLength = todo;
+ 	memcpy(wavehdr[lastwav].lpData, buffer, todo);
+ 
+diff -rupN cdrtools-2.01.nls/cdda2wav/toc.c cdrtools-2.01.md5/cdda2wav/toc.c
+--- cdrtools-2.01.nls/cdda2wav/toc.c	2004-05-22 04:56:44.000000000 +0800
++++ cdrtools-2.01.md5/cdda2wav/toc.c	2011-03-20 15:00:13.906250000 +0800
+@@ -38,7 +38,9 @@ static char     sccsid[] =
+ #include <vadefs.h>
+ #include <schily.h>
+ #include <libport.h>
++#ifdef	HAVE_SYS_IOCTL_H	/* Mingw32 has no sys/ioctl.h */
+ #include <sys/ioctl.h>
++#endif
+ 
+ #define CD_TEXT
+ #define CD_EXTRA
+diff -rupN cdrtools-2.01.nls/cdrecord/cdrecord.c cdrtools-2.01.md5/cdrecord/cdrecord.c
+--- cdrtools-2.01.nls/cdrecord/cdrecord.c	2004-09-09 01:26:35.000000000 +0800
++++ cdrtools-2.01.md5/cdrecord/cdrecord.c	2011-03-20 15:00:00.000000000 +0800
+@@ -59,7 +59,7 @@ static	char sccsid[] =
+ #include "movesect.h"
+ 
+ 
+-char	cdr_version[] = "2.01";
++char	cdr_version[] = "2.01-bootcd.ru";
+ 
+ #if defined(_POSIX_PRIORITY_SCHEDULING) && _POSIX_PRIORITY_SCHEDULING -0 >= 0
+ #ifdef  HAVE_SYS_PRIOCNTL_H	/* The preferred SYSvR4 schduler */
+@@ -274,12 +274,27 @@ main(ac, av)
+ 	char	errstr[80];
+ 	BOOL	gracedone = FALSE;
+ 
++#ifdef	__DJGPP__
++	/* Get time zone information from TZ environment variable */
++	tzset();
++#endif
++#ifdef	__MINGW32__
++	__mgw32__init(av[0]);
++#endif
+ #ifdef __EMX__
+ 	/* This gives wildcard expansion with Non-Posix shells with EMX */
+ 	_wildcard(&ac, &av);
+ #endif
+ 	save_args(ac, av);
++#if	defined(__DJGPP__) || defined(__MINGW32__)
++	set_progname("cdrecord");
++#endif
++#ifndef	__MINGW32__
++/*
++ * Mingw32 has no UIDs and GIDs
++ */
+ 	oeuid = geteuid();		/* Remember saved set uid	*/
++#endif
+ 
+ 
+ 	fillbytes(track, sizeof (track), '\0');
+@@ -349,14 +364,15 @@ main(ac, av)
+ #	define	CLONE_TITLE	""
+ #endif
+ 	if ((flags & F_MSINFO) == 0 || lverbose || flags & F_VERSION) {
+-		printf("Cdrecord%s%s %s (%s-%s-%s) Copyright (C) 1995-2004 Jörg Schilling\n",
++		printf("Cdrecord%s%s %s (%s-%s-%s) Copyright (C) 1995-2004 Joerg Schilling\n",
+ 								PRODVD_TITLE,
+ 								CLONE_TITLE,
+ 								cdr_version,
+ 								HOST_CPU, HOST_VENDOR, HOST_OS);
+ 
++#define	SOURCE_MODIFIED
+ #if	defined(SOURCE_MODIFIED) || !defined(IS_SCHILY_XCONFIG)
+-#define	INSERT_YOUR_EMAIL_ADDRESS_HERE
++#define	INSERT_YOUR_EMAIL_ADDRESS_HERE "Alex Kopylov <cdrtools@bootcd.ru>"
+ #define	NO_SUPPORT	0
+ 		printf("NOTE: this version of cdrecord is an inofficial (modified) release of cdrecord\n");
+ 		printf("      and thus may have bugs that are not present in the original version.\n");
+@@ -364,7 +380,7 @@ main(ac, av)
+ 		printf("      The author of the modifications decided not to provide a support e-mail\n");
+ 		printf("      address so there is absolutely no support for this version.\n");
+ #else
+-		printf("      Please send bug reports and support requests to <%s>.\n", INSERT_YOUR_EMAIL_ADDRESS_HERE);
++		printf("      Please send bug reports and support requests to %s.\n", INSERT_YOUR_EMAIL_ADDRESS_HERE);
+ #endif
+ 		printf("      The original author should not be bothered with problems of this version.\n");
+ 		printf("\n");
+@@ -484,11 +500,22 @@ main(ac, av)
+ 	if ((scgp = scg_open(dev, errstr, sizeof (errstr),
+ 				debug, (flags & F_MSINFO) == 0 || lverbose)) == (SCSI *)0) {
+ 			errmsg("%s%sCannot open SCSI driver.\n", errstr, errstr[0]?". ":"");
++#ifndef	__MINGW32__
++/*
++ * Mingw32 has no UIDs and GIDs
++ */
+ 			errmsgno(EX_BAD, "For possible targets try 'cdrecord -scanbus'.%s\n",
+ 						geteuid() ? " Make sure you are root.":"");
++#else
++			errmsgno(EX_BAD, "For possible targets try 'cdrecord -scanbus'.\n");
++#endif
+ 			errmsgno(EX_BAD, "For possible transport specifiers try 'cdrecord dev=help'.\n");
+ 			exit(EX_BAD);
+ 	}
++#ifndef	__MINGW32__
++/*
++ * Mingw32 has no UIDs and GIDs
++ */
+ 	/*
+ 	 * XXX Below this point we do not need root privilleges anymore.
+ 	 */
+@@ -505,6 +532,7 @@ main(ac, av)
+ #endif
+ 			comerr("Panic cannot set back effective uid.\n");
+ 	}
++#endif
+ 	/*
+ 	 * WARNING: We now are no more able to do any privilleged operation
+ 	 * unless we have been called by root.
+@@ -1009,11 +1037,16 @@ if (lverbose > 2)
+ 		 * even on OS that do not support getreuid() which is *BSD
+ 		 * and SUSv3 only.
+ 		 */
++#ifndef	__MINGW32__
++/*
++ * Mingw32 has no UIDs and GIDs
++ */
+ 		if (oeuid != getuid()) {
+ 			if (setreuid(-1, oeuid) < 0)
+ 				errmsg("Could set back effective uid.\n");
+ 		}
+ #endif
++#endif
+ 		/*
+ 		 * fork() here to start the extra process needed for
+ 		 * improved buffering.
+@@ -1436,7 +1469,9 @@ gracewait(dp, didgracep)
+ 		(dp->cdr_cmdflags & F_DUMMY)?"dummy":"real", gracetime);
+ 	flush();
+ 	signal(SIGINT, intr);
++#ifdef	SIGHUP	/* Mingw32 has no SIGHUP */
+ 	signal(SIGHUP, intr);
++#endif
+ 	signal(SIGTERM, intr);
+ 	/*
+ 	 * Note to people who like to change this: I am geting patch requests
+@@ -1452,7 +1487,12 @@ gracewait(dp, didgracep)
+ 			printf("\n");
+ 			excdr(SIGINT, &exargs);
+ 			signal(SIGINT, SIG_DFL);
++#ifndef	__MINGW32__
++/*
++ * Mingw32 has no kill()
++ */
+ 			kill(getpid(), SIGINT);
++#endif
+ 			/*
+ 			 * In case kill() did not work ;-)
+ 			 */
+@@ -1467,10 +1507,14 @@ grace_done:
+ 	printf(" Operation starts.");
+ 	flush();
+ 	signal(SIGINT, SIG_DFL);
++#ifdef	SIGHUP	/* Mingw32 has no SIGHUP */
+ 	signal(SIGHUP, SIG_DFL);
++#endif
+ 	signal(SIGTERM, SIG_DFL);
+ 	signal(SIGINT, intfifo);
++#ifdef	SIGHUP	/* Mingw32 has no SIGHUP */
+ 	signal(SIGHUP, intfifo);
++#endif
+ 	signal(SIGTERM, intfifo);
+ 	printf("\n");
+ 
+@@ -3266,7 +3310,11 @@ gargs(ac, av, tracksp, trackp, devp, tim
+ 			if (nofix)
+ 				*flagsp |= F_NOFIX;
+ 			if (waiti)
++#ifndef __MINGW32__
+ 				*flagsp |= F_WAITI;
++#else
++				comerrno(EX_BAD, "-waiti not implemented for this platform.\n");
++#endif
+ 			if (immed)
+ 				*flagsp |= F_IMMED;
+ 			if (force)
+@@ -4255,7 +4303,7 @@ rt_raisepri(pri)
+ 
+ #else	/* _POSIX_PRIORITY_SCHEDULING */
+ 
+-#ifdef	__CYGWIN32__
++#if	defined(__CYGWIN32__) || defined(__MINGW32__)
+ /*
+  * Win32 specific priority settings.
+  */
+@@ -4277,6 +4325,16 @@ rt_raisepri(pri)
+  */
+ #define	BOOL	WBOOL		/* This is the Win BOOL		*/
+ #define	format	__format	/* Avoid format parameter hides global ... */
++
++#ifdef	__MINGW32__
++#   if __GNUC__ >= 4
++#      undef 	u_char;
++#      undef 	u_short;
++#      undef 	u_int;
++#      undef 	u_long;
++#   endif
++#endif	/* MINGW Headers */
++
+ #include <windows.h>
+ #undef format
+ #undef interface
+@@ -4356,8 +4414,12 @@ raisepri(pri)
+  * sys/types.h and sys/time.h are already included.
+  */
+ #else
++#ifndef	__MINGW32__	/* Mingw32 has no stropts.h */
+ #	include	<stropts.h>
++#endif
++#ifdef	HAVE_POLL_H	/* Mingw32 has no poll.h */
+ #	include	<poll.h>
++#endif
+ 
+ #ifndef	INFTIM
+ #define	INFTIM	(-1)
+@@ -4374,6 +4436,10 @@ raisepri(pri)
+ LOCAL void
+ wait_input()
+ {
++#ifndef	__MINGW32__
++/*
++ * FIXME: Mingw32 has no select() and poll()
++ */
+ #ifdef	HAVE_SELECT
+ 	fd_set	in;
+ 
+@@ -4388,6 +4454,7 @@ wait_input()
+ 	pfd.revents = 0;
+ 	poll(&pfd, (unsigned long)1, INFTIM);
+ #endif
++#endif
+ }
+ 
+ LOCAL void
+diff -rupN cdrtools-2.01.nls/cdrecord/defaults.c cdrtools-2.01.md5/cdrecord/defaults.c
+--- cdrtools-2.01.nls/cdrecord/defaults.c	2004-03-02 09:10:32.000000000 +0800
++++ cdrtools-2.01.md5/cdrecord/defaults.c	2011-03-20 15:00:14.078125000 +0800
+@@ -42,6 +42,35 @@ LOCAL	char *	strsv		__PR((char *s));
+ LOCAL int
+ open_cdrdefaults()
+ {
++#if	defined(__DJGPP__) || defined(__MINGW32__)
++
++	char	*ininame = "cdrecord.ini";
++	char	*defltname = ininame;
++	int	ret = -1;
++	char	*av0 = saved_av0();
++	char	*av0_last_slash;
++
++	if (av0)
++		av0_last_slash = strrchr(av0, '/');
++
++	if (av0 && av0_last_slash) {
++
++		int	av0_path_len = (av0_last_slash - av0) + 1;
++
++		defltname = malloc(av0_path_len + strlen(ininame) + 1);
++		strncpy(defltname, av0, av0_path_len);
++		strcpy(defltname + av0_path_len, ininame);
++	}
++
++	if (defltname) {
++		ret = defltopen(defltname);
++		if (defltname != ininame)
++			free(defltname);
++	}
++
++	if (!ret)
++		return (0);
++#endif
+ 	/*
+ 	 * WARNING you are only allowed to change this filename if you also
+ 	 * change the documentation and add a statement that makes clear
+diff -rupN cdrtools-2.01.nls/include/mconfig.h cdrtools-2.01.md5/include/mconfig.h
+--- cdrtools-2.01.nls/include/mconfig.h	2004-07-11 06:46:53.000000000 +0800
++++ cdrtools-2.01.md5/include/mconfig.h	2011-03-20 15:00:00.000000000 +0800
+@@ -476,6 +476,58 @@ extern "C" {
+ #	define	near
+ #endif
+ 
++/*--------------------------------------------------------------------------*/
++
++#ifdef	__MINGW32__
++
++/* Hack to avoid patching many source files */
++
++#ifndef	__MINGW32_HACK__
++#define	__MINGW32_HACK__
++
++#include <sys/stat.h>
++#ifdef	clock_t
++#undef	clock_t
++#endif
++#include <sys/time.h>
++#include <time.h>
++
++#define	sleep(a)	_sleep((unsigned long)(a)*1000l);
++
++/* Mingw32 has no timezone structure */
++/*
++struct	timezone {
++	int		tz_minuteswest;
++	int		tz_dsttime;
++};
++*/
++
++/* Mingw32 has no gettimeofday() */
++/*
++extern	int		gettimeofday(struct timeval *tp, struct timezone *tzp);
++*/
++
++#define HAVE_GETTIMEOFDAY 1
++
++/* Mingw32's stat() not allow trailing slash */
++extern	int		__mgw32__stat(const char *path, struct stat *buf);
++#define	stat(a,b)	__mgw32__stat(a,b)
++
++/* FIXME: Mingw32's local/gmtime() returns NULL for dates after 19.01.2038 03:14:07 (time_t > 0x7fffffff) */
++extern	struct tm*	__mgw32__gmtime(const time_t *t);
++#define	gmtime(a)	__mgw32__gmtime(a)
++extern	struct tm*	__mgw32__localtime(const time_t *t);
++#define	localtime(a)	__mgw32__localtime(a)
++
++/* '\' -> '/' */
++extern	char		*__mgw32__strbs2s(char *s);
++extern	void		__mgw32__init(char *av0);
++
++#endif
++#endif
++
++/*--------------------------------------------------------------------------*/
++
+ #ifdef __cplusplus
+ }
+ #endif
+diff -rupN cdrtools-2.01.nls/include/ttydefs.h cdrtools-2.01.md5/include/ttydefs.h
+--- cdrtools-2.01.nls/include/ttydefs.h	2003-02-28 08:01:54.000000000 +0800
++++ cdrtools-2.01.md5/include/ttydefs.h	2011-03-20 15:00:14.109375000 +0800
+@@ -87,11 +87,13 @@
+ #endif
+ 
+ #if	!defined(TIOCGWINSZ) && ! defined(TIOCGSIZE)
++#ifdef	HAVE_SYS_IOCTL_H	/* Mingw32 has no sys/ioctl.h */
+ #	ifndef	_INCL_SYS_IOCTl_H
+ #	include	<sys/ioctl.h>
+ #	define	_INCL_SYS_IOCTL_H
+ #	endif
+ #endif
++#endif
+ 
+ #ifndef	OXTABS					/* OS/2 EMX */
+ #define	OXTABS	0
+diff -rupN cdrtools-2.01.nls/include/unixstd.h cdrtools-2.01.md5/include/unixstd.h
+--- cdrtools-2.01.nls/include/unixstd.h	2004-06-17 20:06:23.000000000 +0800
++++ cdrtools-2.01.md5/include/unixstd.h	2011-03-20 15:00:14.125000000 +0800
+@@ -102,7 +102,7 @@
+ #define	SEEK_END	2	/* Set file pointer to EOF plus "offset" */
+ #endif
+ 
+-#if	!defined(HAVE_UNISTD_H) || !defined(_POSIX_VERSION)
++#if	(!defined(HAVE_UNISTD_H) || !defined(_POSIX_VERSION)) && !defined(__MINGW32__)
+ /*
+  * Maybe we need a lot more definitions here...
+  * It is not clear whether we should have prototyped definitions.
+diff -rupN cdrtools-2.01.nls/libmgw32/Makefile cdrtools-2.01.md5/libmgw32/Makefile
+--- cdrtools-2.01.nls/libmgw32/Makefile	1970-01-01 08:00:00.000000000 +0800
++++ cdrtools-2.01.md5/libmgw32/Makefile	2011-03-20 15:00:14.125000000 +0800
+@@ -0,0 +1,11 @@
++#ident "%W% %E% %Q%"
++###########################################################################
++
++SRCROOT=	..
++RULESDIR=	RULES
++include		$(SRCROOT)/$(RULESDIR)/rules.top
++MK_FILES=	libmgw32.mk
++
++###########################################################################
++include		$(SRCROOT)/$(RULESDIR)/rules.mks
++###########################################################################
+diff -rupN cdrtools-2.01.nls/libmgw32/libmgw32.mk cdrtools-2.01.md5/libmgw32/libmgw32.mk
+--- cdrtools-2.01.nls/libmgw32/libmgw32.mk	1970-01-01 08:00:00.000000000 +0800
++++ cdrtools-2.01.md5/libmgw32/libmgw32.mk	2011-03-20 15:00:14.125000000 +0800
+@@ -0,0 +1,16 @@
++#ident @(#)libmgw32.mk	1.1 04/06/19 
++###########################################################################
++SRCROOT=	..
++RULESDIR=	RULES
++include		$(SRCROOT)/$(RULESDIR)/rules.top
++###########################################################################
++
++.SEARCHLIST:	. $(ARCHDIR)
++VPATH=		.:$(ARCHDIR)
++INSDIR=		lib
++TARGETLIB=	mgw32
++CFILES=		mgw32.c
++
++###########################################################################
++include		$(SRCROOT)/$(RULESDIR)/rules.lib
++###########################################################################
+diff -rupN cdrtools-2.01.nls/libmgw32/mgw32.c cdrtools-2.01.md5/libmgw32/mgw32.c
+--- cdrtools-2.01.nls/libmgw32/mgw32.c	1970-01-01 08:00:00.000000000 +0800
++++ cdrtools-2.01.md5/libmgw32/mgw32.c	2011-03-20 15:00:00.000000000 +0800
+@@ -0,0 +1,167 @@
++/* @(#)mgw32.c	1.0 04/06/19 Copyright (c)2004 by Alex Kopylov */
++/*
++ *	Win32/Mingw32 stuff
++ *
++ *	Copyright (c)2004 by Alex Kopylov
++ */
++/*
++ * This program is free software; you can redistribute it and/or modify
++ * it under the terms of the GNU General Public License as published by
++ * the Free Software Foundation; either version 2, or (at your option)
++ * any later version.
++ *
++ * This program is distributed in the hope that it will be useful,
++ * but WITHOUT ANY WARRANTY; without even the implied warranty of
++ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
++ * GNU General Public License for more details.
++ *
++ * You should have received a copy of the GNU General Public License along with
++ * this program; see the file COPYING.  If not, write to the Free Software
++ * Foundation, 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
++ */
++
++#ifdef	__MINGW32__
++
++#include <windows.h>
++#include <limits.h>
++#include <string.h>
++#include <sys/stat.h>
++#include <sys/time.h>
++#include <time.h>
++
++#ifndef	__MINGW32__
++struct	timezone {
++	int		tz_minuteswest;
++	int		tz_dsttime;
++};
++
++int gettimeofday(struct timeval *tp, struct timezone *tzp) {
++
++	SYSTEMTIME SystemTime;
++	struct tm t;
++	time_t tv_sec;
++
++	GetSystemTime(&SystemTime);
++
++	t.tm_sec = SystemTime.wSecond;
++	t.tm_sec -= _timezone;
++	t.tm_sec -= (_daylight > 0 ? -60 : 0);
++	t.tm_min = SystemTime.wMinute;
++	t.tm_hour = SystemTime.wHour;
++	t.tm_mday = SystemTime.wDay;
++	t.tm_mon = SystemTime.wMonth - 1;
++	t.tm_year = SystemTime.wYear - 1900;
++	t.tm_wday = 0;
++	t.tm_yday = 0;
++	t.tm_isdst = 0;
++
++	if(tp) {
++
++		tp->tv_sec = mktime(&t);
++		tp->tv_usec = (long)SystemTime.wMilliseconds * 1000l;
++	}
++	
++	if(tzp) {
++
++		tzp->tz_minuteswest = _timezone / 60;
++		tzp->tz_dsttime = _daylight;
++	}
++
++	return (0);
++}
++#endif	/* MINGW Internal Defines */
++
++int __mgw32__stat(const char *path, struct stat *buf){
++
++	char tmppath[PATH_MAX+1];
++
++	strncpy(tmppath, path, PATH_MAX);
++	if(tmppath[strlen(tmppath)-1] == '/') {
++		tmppath[strlen(tmppath)-1] = '\0';
++	}
++
++	return (stat((const char *)tmppath, buf));
++}
++
++struct tm* __mgw32__gmtime(const time_t *t) {
++
++	time_t min_t = 0;
++	time_t max_t = 0x7fffffff;
++
++	if (!t)
++		return (gmtime(&min_t));
++	
++	if (*t < 0)
++		return (gmtime(&max_t));
++
++	return (gmtime(t));
++}
++
++struct tm* __mgw32__localtime(const time_t *t) {
++
++	time_t min_t = 0;
++	time_t max_t = 0x7fffffff;
++
++	if (!t)
++		return (localtime(&min_t));
++	
++	if (*t < 0)
++		return (localtime(&max_t));
++
++	return (localtime(t));
++}
++
++int __mgw32__cursormove(int x, int y) {
++
++	COORD Coord;
++	
++	Coord.X = x;
++	Coord.Y = y;
++	
++	return (SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), Coord)?0:-1);
++}
++
++char *__mgw32__icharset() {
++
++	static char cpname[8];
++	
++	sprintf(cpname, "cp%u", GetACP());
++	
++	return (cpname);
++}
++
++char *__mgw32__ocharset() {
++
++	static char cpname[8];
++	
++	sprintf(cpname, "cp%u", GetOEMCP());
++	
++	return (cpname);
++}
++
++char *__mgw32__strbs2s(char *s) {
++
++	char	*p = s;
++
++	if (p) {
++		while (*p) {
++			if (*p == '\\')
++				*p = '/';
++			p++;
++		}
++	}
++
++	return (p);
++}
++
++void __mgw32__init(char *av0) {
++
++	/* Get time zone information from operating system */
++	_tzset();
++
++	if (av0)
++		/* '\' -> '/' */
++		__mgw32__strbs2s(av0);
++}
++
++#endif
+diff -rupN cdrtools-2.01.nls/libscg/scsi-wnt.c cdrtools-2.01.md5/libscg/scsi-wnt.c
+--- cdrtools-2.01.nls/libscg/scsi-wnt.c	2004-07-19 16:10:01.000000000 +0800
++++ cdrtools-2.01.md5/libscg/scsi-wnt.c	2011-03-20 15:00:14.203125000 +0800
+@@ -54,6 +54,10 @@ static	char __sccsid[] =
+ #include <scg/spti-wnt.h>
+ #undef format
+ 
++#ifdef	__MINGW32__
++#define offsetof(TYPE, MEMBER) ((size_t) &((TYPE *)0)->MEMBER)
++#endif
++
+ #ifdef	__CYGWIN32__		/* Use dlopen()			*/
+ #include <dlfcn.h>
+ #endif
+diff -rupN cdrtools-2.01.nls/libscg/scsihack.c cdrtools-2.01.md5/libscg/scsihack.c
+--- cdrtools-2.01.nls/libscg/scsihack.c	2003-11-28 09:33:18.000000000 +0800
++++ cdrtools-2.01.md5/libscg/scsihack.c	2011-03-20 15:00:00.000000000 +0800
+@@ -53,7 +53,9 @@ static	char _sccsid[] =
+ #include <unixstd.h>
+ #include <errno.h>
+ #include <timedefs.h>
++#ifdef	HAVE_SYS_IOCTL_H	/* Mingw32 has no sys/ioctl.h */
+ #include <sys/ioctl.h>
++#endif
+ #include <fctldefs.h>
+ #include <strdefs.h>
+ #include <schily.h>
+@@ -225,8 +227,16 @@ EXPORT scg_ops_t scg_std_ops = {
+ #include "scsi-beos.c"
+ #endif
+ 
+-#ifdef	__CYGWIN32__
++#if defined(__CYGWIN32__) || defined(__MINGW32__)
+ #define	SCSI_IMPL		/* Yep, we support WNT and W9? */
++#ifdef	__MINGW32__
++#   if __GNUC__ >= 4
++#      undef 	u_char;
++#      undef 	u_short;
++#      undef 	u_int;
++#      undef 	u_long;
++#   endif
++#endif	/* MINGW Headers */
+ #include "scsi-wnt.c"
+ #endif
+ 
+diff -rupN cdrtools-2.01.nls/libschily/cmpbytes.c cdrtools-2.01.md5/libschily/cmpbytes.c
+--- cdrtools-2.01.nls/libschily/cmpbytes.c	2003-06-15 21:22:15.000000000 +0800
++++ cdrtools-2.01.md5/libschily/cmpbytes.c	2011-03-20 15:00:00.000000000 +0800
+@@ -25,7 +25,13 @@ static	char sccsid[] =
+  */
+ 
+ #include <standard.h>
++
++#ifdef	__MINGW32__
++#include "align.h"
++#else
+ #include <align.h>
++#endif	/* MINGW Headers */
++
+ #include <schily.h>
+ 
+ #define	DO8(a)	a; a; a; a; a; a; a; a;
+diff -rupN cdrtools-2.01.nls/libschily/cmpnullbytes.c cdrtools-2.01.md5/libschily/cmpnullbytes.c
+--- cdrtools-2.01.nls/libschily/cmpnullbytes.c	2003-06-15 21:22:15.000000000 +0800
++++ cdrtools-2.01.md5/libschily/cmpnullbytes.c	2011-03-20 15:00:00.000000000 +0800
+@@ -25,7 +25,13 @@ static	char sccsid[] =
+  */
+ 
+ #include <standard.h>
++
++#ifdef	__MINGW32__
++#include "align.h"
++#else
+ #include <align.h>
++#endif	/* MINGW Headers */
++
+ #include <schily.h>
+ 
+ #define	DO8(a)	a; a; a; a; a; a; a; a;
+diff -rupN cdrtools-2.01.nls/libschily/fexec.c cdrtools-2.01.md5/libschily/fexec.c
+--- cdrtools-2.01.nls/libschily/fexec.c	2004-06-06 19:50:24.000000000 +0800
++++ cdrtools-2.01.md5/libschily/fexec.c	2011-03-20 15:00:14.250000000 +0800
+@@ -165,6 +165,14 @@ fexecle(name, in, out, err, va_alist)
+ 	return (ret);
+ }
+ 
++#ifndef	__MINGW32__
++
++/*
++ * FIXME: Mingw32 has no fcntl(), F_DUPFD, F_GETFD, F_SETFD
++ *        execve() declared as
++ *        int execve (const char*, const char* const*, const char* const*);
++ */
++
+ EXPORT int
+ fexecv(name, in, out, err, ac, av)
+ 	const char *name;
+@@ -360,6 +368,8 @@ fdmove(fd1, fd2)
+ 
+ #endif
+ 
++#endif	/* __MINGW32__ */
++
+ /*----------------------------------------------------------------------------
+ |
+ |	get PATH from env
+diff -rupN cdrtools-2.01.nls/libschily/fillbytes.c cdrtools-2.01.md5/libschily/fillbytes.c
+--- cdrtools-2.01.nls/libschily/fillbytes.c	2003-06-15 21:22:15.000000000 +0800
++++ cdrtools-2.01.md5/libschily/fillbytes.c	2011-03-20 15:00:00.000000000 +0800
+@@ -21,7 +21,13 @@
+  */
+ 
+ #include <standard.h>
++
++#ifdef	__MINGW32__
++#include "align.h"
++#else
+ #include <align.h>
++#endif	/* MINGW Headers */
++
+ #include <schily.h>
+ 
+ #define	DO8(a)	a; a; a; a; a; a; a; a;
+diff -rupN cdrtools-2.01.nls/libschily/findbytes.c cdrtools-2.01.md5/libschily/findbytes.c
+--- cdrtools-2.01.nls/libschily/findbytes.c	2003-06-15 21:22:15.000000000 +0800
++++ cdrtools-2.01.md5/libschily/findbytes.c	2011-03-20 15:00:00.000000000 +0800
+@@ -27,7 +27,13 @@
+ #include <mconfig.h>
+ #include <stdxlib.h>
+ #include <utypes.h>
++
++#ifdef	__MINGW32__
++#include "align.h"
++#else
+ #include <align.h>
++#endif	/* MINGW Headers */
++
+ #include <standard.h>
+ #include <strdefs.h>
+ #include <schily.h>
+@@ -84,7 +90,11 @@ findbytes(vp, cnt, val)
+ 	 * The following line will abort compilation on all compilers
+ 	 * if none of the above is defines. And that's  what we want.
+ 	 */
+-	error	SIZE_LONG has unknown value
++	
++#ifndef	__MINGW32__
++     error	SIZE_LONG has unknown value
++#endif	/* Without MINGW */
++
+ #endif
+ #endif
+ 
+diff -rupN cdrtools-2.01.nls/libschily/getav0.c cdrtools-2.01.md5/libschily/getav0.c
+--- cdrtools-2.01.nls/libschily/getav0.c	2004-05-09 19:18:27.000000000 +0800
++++ cdrtools-2.01.md5/libschily/getav0.c	2011-03-20 15:00:00.000000000 +0800
+@@ -26,7 +26,13 @@ static	char sccsid[] =
+ 
+ #include <mconfig.h>
+ #include <sigblk.h>
++
++#ifdef	__MINGW32__
++#include "avoffset.h"
++#else
+ #include <avoffset.h>
++#endif	/* MINGW Headers */
++
+ #include <standard.h>
+ #include <schily.h>
+ 
+diff -rupN cdrtools-2.01.nls/libschily/getfp.c cdrtools-2.01.md5/libschily/getfp.c
+--- cdrtools-2.01.nls/libschily/getfp.c	2003-07-13 07:10:47.000000000 +0800
++++ cdrtools-2.01.md5/libschily/getfp.c	2011-03-20 15:00:00.000000000 +0800
+@@ -33,7 +33,12 @@
+  * return value is usable or junk. To be able to do this, we include getfp.c
+  * from avoffset.c and define IS_AVOFFSET before.
+  */
++
++#ifdef	__MINGW32__
++#include "avoffset.h"
++#else
+ #include <avoffset.h>
++#endif	/* MINGW Headers */
+ 
+ #if	!defined(AV_OFFSET) || !defined(FP_INDIR)
+ #	ifdef	HAVE_SCANSTACK
+diff -rupN cdrtools-2.01.nls/libschily/gethostname.c cdrtools-2.01.md5/libschily/gethostname.c
+--- cdrtools-2.01.nls/libschily/gethostname.c	2003-10-04 20:30:41.000000000 +0800
++++ cdrtools-2.01.md5/libschily/gethostname.c	2011-03-20 15:00:14.265625000 +0800
+@@ -64,6 +64,21 @@ gethostname(name, namelen)
+ 	strncpy(name, uts.nodename, namelen);
+ 	return (0);
+ }
++
++#else
++#ifdef	__MINGW32__
++
++EXPORT int
++gethostname(name, namelen)
++	char	*name;
++	int	namelen;
++{
++	*name = '\0';
++	return (0);
++}
++
++#endif
++
+ #endif
+ 
+ #endif
+diff -rupN cdrtools-2.01.nls/libschily/handlecond.c cdrtools-2.01.md5/libschily/handlecond.c
+--- cdrtools-2.01.nls/libschily/handlecond.c	2004-05-09 19:24:01.000000000 +0800
++++ cdrtools-2.01.md5/libschily/handlecond.c	2011-03-20 15:00:00.000000000 +0800
+@@ -44,7 +44,13 @@
+ #include <standard.h>
+ #include <stdxlib.h>
+ #include <strdefs.h>
++
++#ifdef	__MINGW32__
++#include "avoffset.h"
++#else
+ #include <avoffset.h>
++#endif	/* MINGW Headers */
++
+ #include <utypes.h>
+ #include <schily.h>
+ 
+diff -rupN cdrtools-2.01.nls/libschily/movebytes.c cdrtools-2.01.md5/libschily/movebytes.c
+--- cdrtools-2.01.nls/libschily/movebytes.c	2003-06-15 21:22:16.000000000 +0800
++++ cdrtools-2.01.md5/libschily/movebytes.c	2011-03-20 15:00:00.000000000 +0800
+@@ -21,7 +21,13 @@
+  */
+ 
+ #include <standard.h>
++
++#ifdef	__MINGW32__
++#include "align.h"
++#else
+ #include <align.h>
++#endif	/* MINGW Headers */
++
+ #include <schily.h>
+ 
+ #define	DO8(a)	a; a; a; a; a; a; a; a;
+diff -rupN cdrtools-2.01.nls/libschily/raisecond.c cdrtools-2.01.md5/libschily/raisecond.c
+--- cdrtools-2.01.nls/libschily/raisecond.c	2004-05-09 19:24:01.000000000 +0800
++++ cdrtools-2.01.md5/libschily/raisecond.c	2011-03-20 15:00:00.000000000 +0800
+@@ -32,7 +32,13 @@
+ #include <unixstd.h>
+ #include <stdxlib.h>
+ #include <strdefs.h>
++
++#ifdef	__MINGW32__
++#include "avoffset.h"
++#else
+ #include <avoffset.h>
++#endif	/* MINGW Headers */
++
+ #include <schily.h>
+ 
+ #if	!defined(AV_OFFSET) || !defined(FP_INDIR)
+diff -rupN cdrtools-2.01.nls/libschily/rename.c cdrtools-2.01.md5/libschily/rename.c
+--- cdrtools-2.01.nls/libschily/rename.c	2004-09-05 02:35:36.000000000 +0800
++++ cdrtools-2.01.md5/libschily/rename.c	2011-03-20 15:00:14.265625000 +0800
+@@ -80,9 +80,14 @@ rename(old, new)
+ 
+ 	if (lstat(new, &xstat) >= 0) {
+ 		newpresent = TRUE;
++#ifndef	__MINGW32__
++/*
++ * FIXME: Mingw32's .st_ino always 0
++ */
+ 		if (ostat.st_dev == xstat.st_dev &&
+ 		    ostat.st_ino == xstat.st_ino)
+ 			return (0);		/* old == new we are done */
++#endif
+ 	}
+ 
+ 	strplen = js_snprintf(strpid, sizeof (strpid), ".%lld",
+diff -rupN cdrtools-2.01.nls/libschily/saveargs.c cdrtools-2.01.md5/libschily/saveargs.c
+--- cdrtools-2.01.nls/libschily/saveargs.c	2003-07-13 06:37:31.000000000 +0800
++++ cdrtools-2.01.md5/libschily/saveargs.c	2011-03-20 15:00:00.000000000 +0800
+@@ -24,7 +24,13 @@
+ #include <standard.h>
+ #include <strdefs.h>
+ #include <stdxlib.h>
++
++#ifdef	__MINGW32__
++#include "avoffset.h"
++#else
+ #include <avoffset.h>
++#endif	/* MINGW Headers */
++
+ #include <schily.h>
+ 
+ #if	!defined(AV_OFFSET) || !defined(FP_INDIR)
+diff -rupN cdrtools-2.01.nls/libschily/setfp.c cdrtools-2.01.md5/libschily/setfp.c
+--- cdrtools-2.01.nls/libschily/setfp.c	2003-07-13 19:41:05.000000000 +0800
++++ cdrtools-2.01.md5/libschily/setfp.c	2011-03-20 15:00:00.000000000 +0800
+@@ -22,7 +22,13 @@
+ 
+ #include <mconfig.h>
+ #include <standard.h>
++
++#ifdef	__MINGW32__
++#include "avoffset.h"
++#else
+ #include <avoffset.h>
++#endif	/* MINGW Headers */
++
+ #include <schily.h>
+ 
+ #if	!defined(AV_OFFSET) || !defined(FP_INDIR)
+diff -rupN cdrtools-2.01.nls/libschily/stdio/fpipe.c cdrtools-2.01.md5/libschily/stdio/fpipe.c
+--- cdrtools-2.01.nls/libschily/stdio/fpipe.c	2004-08-08 19:02:06.000000000 +0800
++++ cdrtools-2.01.md5/libschily/stdio/fpipe.c	2011-03-20 15:00:14.281250000 +0800
+@@ -20,6 +20,11 @@
+ 
+ #include "schilyio.h"
+ 
++#ifdef	__MINGW32__
++#include <fcntl.h>
++#define	pipe(a)		_pipe(a, 512, O_BINARY)
++#endif
++
+ EXPORT int
+ fpipe(pipef)
+ 	FILE *pipef[];
+diff -rupN cdrtools-2.01.nls/libunls/nls_file.old.c cdrtools-2.01.md5/libunls/nls_file.old.c
+--- cdrtools-2.01.nls/libunls/nls_file.old.c	1970-01-01 08:00:00.000000000 +0800
++++ cdrtools-2.01.md5/libunls/nls_file.old.c	2003-02-28 08:04:53.000000000 +0800
+@@ -0,0 +1,201 @@
++/* @(#)nls_file.c	1.2 03/02/28 2000 J. Schilling */
++#ifndef lint
++static	char sccsid[] =
++	"@(#)nls_file.c	1.2 03/02/28 2000 J. Schilling";
++#endif
++/*
++ * This program is free software; you can redistribute it and/or modify
++ * it under the terms of the GNU General Public License as published by
++ * the Free Software Foundation; either version 2, or (at your option)
++ * any later version.
++ *
++ * This program is distributed in the hope that it will be useful,
++ * but WITHOUT ANY WARRANTY; without even the implied warranty of
++ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
++ * GNU General Public License for more details.
++ *
++ * You should have received a copy of the GNU General Public License along with
++ * this program; see the file COPYING.  If not, write to the Free Software
++ * Foundation, 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
++ */
++/*
++ *	Modifications to make the code portable Copyright (c) 2000 J. Schilling
++ *
++ * nls_file: create a charset table from a input table file 
++ * from the Unicode Organization (www.unicode.org).
++ * The Unicode to charset table has only exact mappings.
++ *
++ * Only reads single byte to word matches.
++ *
++ * James Pearson (j.pearson@ge.ucl.ac.uk) 16-Aug-2000
++ */
++
++#include <mconfig.h>
++#include <stdio.h>
++#include <stdxlib.h>
++#include <strdefs.h>
++#include <libport.h>
++#include "nls.h"
++
++#define NUM	256
++
++static void	inc_use_count	__PR((void));
++static void	dec_use_count	__PR((void));
++
++static void	free_mem __PR((struct nls_unicode *, unsigned char **));
++
++static void
++free_mem(charset2uni, page_uni2charset)
++	struct nls_unicode *charset2uni;
++	unsigned char **page_uni2charset;
++{
++	int	i;
++
++	if (charset2uni)
++		free(charset2uni);
++
++	if (page_uni2charset) {
++		for (i=0;i<NUM;i++) {
++			if (page_uni2charset[i]) {
++				free(page_uni2charset[i]);
++			}
++		}
++		free(page_uni2charset);
++	}
++}
++
++static void
++inc_use_count()
++{
++	MOD_INC_USE_COUNT;
++}
++
++static void
++dec_use_count()
++{
++	MOD_DEC_USE_COUNT;
++}
++
++int
++init_nls_file(filename)
++	char	*filename;
++{
++	FILE	*fp;
++	struct nls_unicode *charset2uni = NULL;
++	unsigned char **page_uni2charset = NULL;
++	char	buf[1024];
++	char	*p;
++	unsigned int	cp, uc;
++	struct nls_table *table;
++	int	i, ok = 0;
++
++	/* give up if no filename is given */
++	if (filename == NULL)
++		return -1;
++
++	/* see if we already have a table with this name - built in tables
++	   have precedence of file tables - i.e. can't have the name of an
++	   existing table. Also, we may have already registered this file
++	   table */
++	if (find_nls(filename) != NULL)
++		return -1;
++
++	if ((fp = fopen(filename, "r")) == NULL)
++		return -1;
++
++	/* allocate memory for the forward conversion table */
++	if((charset2uni = (struct nls_unicode *)
++			malloc(sizeof(struct nls_unicode) * NUM)) == NULL) {
++		free_mem(charset2uni, page_uni2charset);
++		return -1;
++	}
++
++	/* any unknown character should be mapped to NULL */
++	memset(charset2uni, 0, sizeof(struct nls_unicode) * NUM);
++
++	/*
++	 * some source files don't set the control characters 0x00 - 0x1f
++	 * so set these by default
++	 */
++	for (i=0;i<32;i++) {
++		charset2uni[i].uni1 = i;
++	}
++
++	/* also set DELETE (0x7f) by default */
++	charset2uni[0x7f].uni1 = 0x7f;
++
++	/* read each line of the file */
++	while (fgets(buf, sizeof(buf), fp) != NULL) {
++		/* cut off any comments */
++		if ((p = strchr(buf, '#')) != NULL)
++			*p = '\0';
++
++		/* look for two hex values */
++		if (sscanf(buf, "%x%x", &cp, &uc) == 2) {
++			/* if they are not in range - fail */
++			if (cp > 0xff || uc > 0xffff) {
++				continue;
++			}
++
++			/* set the Unicode value for the given code point */
++			charset2uni[cp].uni1 = uc & 0xff;
++			charset2uni[cp].uni2 = (uc >> 8) & 0xff;
++
++			/* make sure we find at least one pair ... */
++			ok = 1;
++		}
++	}
++
++	fclose(fp);
++
++	if (!ok) {
++		/* we haven't found anything ... */
++		free_mem(charset2uni, page_uni2charset);
++		return -1;
++	}
++
++	/* allocate memory for the reverse table */
++	if ((page_uni2charset = (unsigned char **)
++			malloc(sizeof(unsigned char *) * NUM)) == NULL) {
++		free_mem(charset2uni, page_uni2charset);
++		return -1;
++	}
++
++	memset(page_uni2charset, 0, sizeof(unsigned char *) * NUM);
++
++	/* loop through the forward table, setting the reverse value */
++	for (i=0;i<NUM;i++) {
++		uc = charset2uni[i].uni2;
++		cp = charset2uni[i].uni1;
++		/* if the page doesn't exist, create a page */
++		if (page_uni2charset[uc] == NULL) {
++			if ((page_uni2charset[uc] =
++				(unsigned char *) malloc(NUM)) == NULL) {
++				free_mem(charset2uni, page_uni2charset);
++				return -1;
++			}
++			memset(page_uni2charset[uc], 0, NUM);
++		}
++
++		/* set the reverse point in the page */
++		page_uni2charset[uc][cp] = i;
++	}
++
++	/* set up the table */
++	if ((table = (struct nls_table *)malloc(sizeof (struct nls_table)))
++							== NULL) {
++		free_mem(charset2uni, page_uni2charset);
++		return -1;
++	}
++
++	/* give the table the file name, so we can find it again if needed */
++	table->charset = strdup(filename);
++	table->page_uni2charset = page_uni2charset;
++	table->charset2uni = charset2uni;
++	table->inc_use_count = inc_use_count;
++	table->dec_use_count = dec_use_count;
++	table->next = NULL;
++
++	/* register the table */
++	return register_nls(table);
++}
+diff -rupN cdrtools-2.01.nls/mkisofs/Makefile cdrtools-2.01.md5/mkisofs/Makefile
+--- cdrtools-2.01.nls/mkisofs/Makefile	2004-02-22 23:13:43.000000000 +0800
++++ cdrtools-2.01.md5/mkisofs/Makefile	2011-03-20 15:00:14.296875000 +0800
+@@ -36,6 +36,8 @@ CPPOPTS +=	-I../libhfs_iso/
+ CPPOPTS	+=	-DHAVE_CONFIG_H -DUSE_LIBSCHILY -DUSE_SCG \
+ 		'-DAPPID_DEFAULT="MKISOFS ISO 9660/HFS FILESYSTEM BUILDER & CDRECORD CD-R/DVD CREATOR (C) 1993 E.YOUNGDALE (C) 1997 J.PEARSON/J.SCHILLING"' \
+ 		-I../cdrecord
++CPPOPTS +=	-DDUPLICATES_ONCE
++CPPOPTS +=	-DFORCE_UPPERCASE
+ CFILES=		mkisofs.c tree.c write.c hash.c rock.c udf.c multi.c \
+ 		joliet.c match.c name.c fnmatch.c eltorito.c boot.c \
+ 		getopt.c getopt1.c \
+@@ -44,12 +46,12 @@ CFILES=		mkisofs.c tree.c write.c hash.c
+ 		modes.c \
+ 		apple.c volume.c desktop.c mac_label.c stream.c \
+ 		ifo_read.c dvd_file.c dvd_reader.c \
+-		defaults.c getnum.c
++		defaults.c getnum.c md5c.c
+ HFILES=		apple.h bootinfo.h config.h defaults.h diskmbr.h exclude.h \
+ 		fnmatch.h getopt.h iso9660.h mac_label.h mactypes.h match.h \
+ 		mkisofs.h sunlabel.h udf.h udf_fs.h vms.h \
+ 		ifo_read.h dvd_file.h dvd_reader.h bswap.h ifo_types.h \
+-		../cdrecord/defaults.h
++		../cdrecord/defaults.h md5.h mytype.h
+ 
+ LIBS=		-lhfs -lfile -lunls -lrscg -lscg $(LIB_VOLMGT) -ldeflt -lschily $(SCSILIB) $(LIB_SOCKET)
+ XMK_FILE=	Makefile.man hybridman.mk
+diff -rupN cdrtools-2.01.nls/mkisofs/apple.c cdrtools-2.01.md5/mkisofs/apple.c
+--- cdrtools-2.01.nls/mkisofs/apple.c	2011-03-20 15:19:02.531250000 +0800
++++ cdrtools-2.01.md5/mkisofs/apple.c	2011-03-20 15:00:14.375000000 +0800
+@@ -45,7 +45,9 @@ static	char sccsid[] =
+ #include <fctldefs.h>
+ #include <utypes.h>
+ #include <ctype.h>
++#ifndef	__MINGW32__		/* Mingw32 has no netinet/in.h */
+ #include <netinet/in.h>
++#endif
+ #include <apple.h>
+ #include <schily.h>
+ 
+diff -rupN cdrtools-2.01.nls/mkisofs/config.h cdrtools-2.01.md5/mkisofs/config.h
+--- cdrtools-2.01.nls/mkisofs/config.h	2004-03-02 07:42:43.000000000 +0800
++++ cdrtools-2.01.md5/mkisofs/config.h	2011-03-20 15:00:14.390625000 +0800
+@@ -21,3 +21,17 @@
+  */
+ 
+ #include <mconfig.h>
++
++#ifdef	DUPLICATES_ONCE
++#if	__STDC__-0 != 0 || (defined PROTOTYPES && defined STDC_HEADERS)
++#define UINT_C(a)	(a##u)
++#define ULONG_C(a)	(a##ul)
++#define USHORT_C(a)	(a##uh)
++#define CONCAT(a,b)	a##b
++#else
++#define UINT_C(a)	((unsigned) a)
++#define ULONG_C(a)	((unsigned long) a)
++#define USHORT_C(a)	((unsigned short) a)
++#define CONCAT(a,b)	a/**/b
++#endif
++#endif
+diff -rupN cdrtools-2.01.nls/mkisofs/defaults.c cdrtools-2.01.md5/mkisofs/defaults.c
+--- cdrtools-2.01.nls/mkisofs/defaults.c	2004-03-02 09:10:32.000000000 +0800
++++ cdrtools-2.01.md5/mkisofs/defaults.c	2011-03-20 15:00:14.406250000 +0800
+@@ -42,6 +42,35 @@ LOCAL	char *	strsv		__PR((char *s));
+ LOCAL int
+ open_cdrdefaults()
+ {
++#if	defined(__DJGPP__) || defined(__MINGW32__)
++
++	char	*ininame = "cdrecord.ini";
++	char	*defltname = ininame;
++	int	ret = -1;
++	char	*av0 = saved_av0();
++	char	*av0_last_slash;
++
++	if (av0)
++		av0_last_slash = strrchr(av0, '/');
++
++	if (av0 && av0_last_slash) {
++
++		int	av0_path_len = (av0_last_slash - av0) + 1;
++
++		defltname = malloc(av0_path_len + strlen(ininame) + 1);
++		strncpy(defltname, av0, av0_path_len);
++		strcpy(defltname + av0_path_len, ininame);
++	}
++
++	if (defltname) {
++		ret = defltopen(defltname);
++		if (defltname != ininame)
++			free(defltname);
++	}
++
++	if (!ret)
++		return (0);
++#endif
+ 	/*
+ 	 * WARNING you are only allowed to change this filename if you also
+ 	 * change the documentation and add a statement that makes clear
+diff -rupN cdrtools-2.01.nls/mkisofs/defaults.h cdrtools-2.01.md5/mkisofs/defaults.h
+--- cdrtools-2.01.nls/mkisofs/defaults.h	2004-06-01 21:51:47.000000000 +0800
++++ cdrtools-2.01.md5/mkisofs/defaults.h	2011-03-20 15:00:14.406250000 +0800
+@@ -55,7 +55,7 @@
+ #define	SYSTEM_ID_DEFAULT	"AIX"
+ #endif
+ 
+-#if	defined(_WIN) || defined(__CYGWIN32__) || defined(__CYGWIN__)
++#if	defined(_WIN) || defined(__CYGWIN32__) || defined(__CYGWIN__) || defined(__MINGW32__)
+ #define	SYSTEM_ID_DEFAULT	"Win32"
+ #endif /* _WIN */
+ 
+diff -rupN cdrtools-2.01.nls/mkisofs/diag/defaults.c cdrtools-2.01.md5/mkisofs/diag/defaults.c
+--- cdrtools-2.01.nls/mkisofs/diag/defaults.c	2004-03-02 09:10:32.000000000 +0800
++++ cdrtools-2.01.md5/mkisofs/diag/defaults.c	2011-03-20 15:00:14.437500000 +0800
+@@ -42,6 +42,35 @@ LOCAL	char *	strsv		__PR((char *s));
+ LOCAL int
+ open_cdrdefaults()
+ {
++#if	defined(__DJGPP__) || defined(__MINGW32__)
++
++	char	*ininame = "cdrecord.ini";
++	char	*defltname = ininame;
++	int	ret = -1;
++	char	*av0 = saved_av0();
++	char	*av0_last_slash;
++
++	if (av0)
++		av0_last_slash = strrchr(av0, '/');
++
++	if (av0 && av0_last_slash) {
++
++		int	av0_path_len = (av0_last_slash - av0) + 1;
++
++		defltname = malloc(av0_path_len + strlen(ininame) + 1);
++		strncpy(defltname, av0, av0_path_len);
++		strcpy(defltname + av0_path_len, ininame);
++	}
++
++	if (defltname) {
++		ret = defltopen(defltname);
++		if (defltname != ininame)
++			free(defltname);
++	}
++
++	if (!ret)
++		return (0);
++#endif
+ 	/*
+ 	 * WARNING you are only allowed to change this filename if you also
+ 	 * change the documentation and add a statement that makes clear
+diff -rupN cdrtools-2.01.nls/mkisofs/diag/dump.c cdrtools-2.01.md5/mkisofs/diag/dump.c
+--- cdrtools-2.01.nls/mkisofs/diag/dump.c	2004-09-09 01:28:58.000000000 +0800
++++ cdrtools-2.01.md5/mkisofs/diag/dump.c	2011-03-20 15:00:14.453125000 +0800
+@@ -41,6 +41,11 @@ static	char sccsid[] =
+ #include "../scsi.h"
+ #include "../../cdrecord/defaults.h"
+ 
++#ifdef	__MINGW32__
++#include <conio.h>
++extern	int		__mgw32__cursormove(int x, int y);
++#endif
++
+ /*
+  * Note: always use these macros to avoid problems.
+  *
+@@ -62,6 +67,7 @@ LOCAL	Uchar		sector[2048];
+ LOCAL	Uchar		buffer[PAGE];
+ LOCAL	Uchar		search[64];
+ 
++#ifndef	__MINGW32__
+ #ifdef	USE_V7_TTY
+ LOCAL	struct sgttyb	savetty;
+ LOCAL	struct sgttyb	newtty;
+@@ -69,6 +75,7 @@ LOCAL	struct sgttyb	newtty;
+ LOCAL	struct termios	savetty;
+ LOCAL	struct termios	newtty;
+ #endif
++#endif
+ 
+ LOCAL void	reset_tty	__PR((void));
+ LOCAL void	set_tty		__PR((void));
+@@ -83,6 +90,7 @@ EXPORT int	main		__PR((int argc, char *a
+ LOCAL void
+ reset_tty()
+ {
++#ifndef	__MINGW32__
+ #ifdef USE_V7_TTY
+ 	if (ioctl(STDIN_FILENO, TIOCSETN, &savetty) == -1) {
+ #else
+@@ -99,11 +107,13 @@ reset_tty()
+ 		exit(1);
+ #endif
+ 	}
++#endif
+ }
+ 
+ LOCAL void
+ set_tty()
+ {
++#ifndef	__MINGW32__
+ #ifdef USE_V7_TTY
+ 	if (ioctl(STDIN_FILENO, TIOCSETN, &newtty) == -1) {
+ #else
+@@ -120,6 +130,7 @@ set_tty()
+ 		exit(1);
+ #endif
+ 	}
++#endif
+ }
+ 
+ 
+@@ -156,7 +167,11 @@ crsr2(row, col)
+ 	int	row;
+ 	int	col;
+ {
++#ifndef	__MINGW32__
+ 	printf("\033[%d;%dH", row, col);
++#else
++	__mgw32__cursormove(col, row);
++#endif
+ }
+ 
+ LOCAL void
+@@ -264,7 +279,17 @@ main(argc, argv)
+ 	int	i;
+ 	int	j;
+ 
++#ifdef	__DJGPP__
++	/* Get time zone information from TZ environment variable */
++	tzset();
++#endif
++#ifdef	__MINGW32__
++	__mgw32__init(argv[0]);
++#endif
+ 	save_args(argc, argv);
++#if	defined(__DJGPP__) || defined(__MINGW32__)
++	set_progname("devdump");
++#endif
+ 
+ 	cac = argc - 1;
+ 	cav = argv + 1;
+@@ -276,7 +301,7 @@ main(argc, argv)
+ 	if (help)
+ 		usage(0);
+ 	if (prvers) {
+-		printf("devdump %s (%s-%s-%s)\n", "2.01",
++		printf("devdump %s (%s-%s-%s)\n", "2.01-bootcd.ru",
+ 					HOST_CPU, HOST_VENDOR, HOST_OS);
+ 		exit(0);
+ 	}
+@@ -333,6 +358,7 @@ main(argc, argv)
+ 		printf("\n");
+ 	file_addr = (off_t)0;
+ 
++#ifndef	__MINGW32__
+ 	/*
+ 	 * Now setup the keyboard for single character input.
+ 	 */
+@@ -361,6 +387,7 @@ main(argc, argv)
+ 	newtty.c_lflag   &= ~ECHO;
+ 	newtty.c_cc[VMIN] = 1;
+ #endif
++#endif	/* __MINGW32__ */
+ 	set_tty();
+ #ifdef	SIGTSTP
+ 	signal(SIGTSTP, onsusp);
+@@ -370,7 +397,11 @@ main(argc, argv)
+ 	do {
+ 		if (file_addr < (off_t)0) file_addr = (off_t)0;
+ 		showblock(1);
++#ifndef	__MINGW32__
+ 		read(STDIN_FILENO, &c, 1);
++#else
++		c = getch();
++#endif
+ 		if (c == 'a')
+ 			file_addr -= PAGE;
+ 		if (c == 'b')
+diff -rupN cdrtools-2.01.nls/mkisofs/diag/isodebug.c cdrtools-2.01.md5/mkisofs/diag/isodebug.c
+--- cdrtools-2.01.nls/mkisofs/diag/isodebug.c	2004-09-09 01:28:58.000000000 +0800
++++ cdrtools-2.01.md5/mkisofs/diag/isodebug.c	2011-03-20 15:00:14.484375000 +0800
+@@ -194,7 +194,17 @@ main(argc, argv)
+ 	char	*p;
+ 	char	*eol;
+ 
++#ifdef	__DJGPP__
++	/* Get time zone information from TZ environment variable */
++	tzset();
++#endif
++#ifdef	__MINGW32__
++	__mgw32__init(argv[0]);
++#endif
+ 	save_args(argc, argv);
++#if	defined(__DJGPP__) || defined(__MINGW32__)
++	set_progname("isodebug");
++#endif
+ 
+ 	cac = argc - 1;
+ 	cav = argv + 1;
+@@ -206,7 +216,7 @@ main(argc, argv)
+ 	if (help)
+ 		usage(0);
+ 	if (prvers) {
+-		printf("isodebug %s (%s-%s-%s)\n", "2.01",
++		printf("isodebug %s (%s-%s-%s)\n", "2.01-bootcd.ru",
+ 					HOST_CPU, HOST_VENDOR, HOST_OS);
+ 		exit(0);
+ 	}
+diff -rupN cdrtools-2.01.nls/mkisofs/diag/isodump.c cdrtools-2.01.md5/mkisofs/diag/isodump.c
+--- cdrtools-2.01.nls/mkisofs/diag/isodump.c	2004-09-09 01:28:58.000000000 +0800
++++ cdrtools-2.01.md5/mkisofs/diag/isodump.c	2011-03-20 15:00:14.515625000 +0800
+@@ -42,6 +42,11 @@ static	char sccsid[] =
+ #include "../scsi.h"
+ #include "../../cdrecord/defaults.h"
+ 
++#ifdef	__MINGW32__
++#include <conio.h>
++extern	int		__mgw32__cursormove(int x, int y);
++#endif
++
+ /*
+  * XXX JS: Some structures have odd lengths!
+  * Some compilers (e.g. on Sun3/mc68020) padd the structures to even length.
+@@ -184,6 +189,7 @@ isonum_733(p)
+ 	return (isonum_731((char *)p));
+ }
+ 
++#ifndef	__MINGW32__
+ #ifdef	USE_V7_TTY
+ LOCAL	struct sgttyb	savetty;
+ LOCAL	struct sgttyb	newtty;
+@@ -191,10 +197,12 @@ LOCAL	struct sgttyb	newtty;
+ LOCAL	struct termios savetty;
+ LOCAL	struct termios newtty;
+ #endif
++#endif
+ 
+ LOCAL void
+ reset_tty()
+ {
++#ifndef	__MINGW32__
+ #ifdef USE_V7_TTY
+ 	if (ioctl(STDIN_FILENO, TIOCSETN, &savetty) == -1) {
+ #else
+@@ -211,11 +219,13 @@ reset_tty()
+ 		exit(1);
+ #endif
+ 	}
++#endif
+ }
+ 
+ LOCAL void
+ set_tty()
+ {
++#ifndef	__MINGW32__
+ #ifdef USE_V7_TTY
+ 	if (ioctl(STDIN_FILENO, TIOCSETN, &newtty) == -1) {
+ #else
+@@ -232,6 +242,7 @@ set_tty()
+ 		exit(1);
+ #endif
+ 	}
++#endif
+ }
+ 
+ /* Come here when we get a suspend signal from the terminal */
+@@ -267,7 +278,11 @@ crsr2(row, col)
+ 	int	row;
+ 	int	col;
+ {
++#ifndef	__MINGW32__
+ 	printf("\033[%d;%dH", row, col);
++#else
++	__mgw32__cursormove(col, row);
++#endif
+ }
+ 
+ LOCAL int
+@@ -547,7 +562,17 @@ main(argc, argv)
+ 	struct iso_primary_descriptor	ipd;
+ 	struct iso_directory_record	*idr;
+ 
++#ifdef	__DJGPP__
++	/* Get time zone information from TZ environment variable */
++	tzset();
++#endif
++#ifdef	__MINGW32__
++	__mgw32__init(argv[0]);
++#endif
+ 	save_args(argc, argv);
++#if	defined(__DJGPP__) || defined(__MINGW32__)
++	set_progname("isodump");
++#endif
+ 
+ 	cac = argc - 1;
+ 	cav = argv + 1;
+@@ -559,7 +584,7 @@ main(argc, argv)
+ 	if (help)
+ 		usage(0);
+ 	if (prvers) {
+-		printf("isodump %s (%s-%s-%s)\n", "2.01",
++		printf("isodump %s (%s-%s-%s)\n", "2.01-bootcd.ru",
+ 					HOST_CPU, HOST_VENDOR, HOST_OS);
+ 		exit(0);
+ 	}
+@@ -629,6 +654,7 @@ main(argc, argv)
+ 	file_addr = (off_t)isonum_733(idr->extent);
+ 	file_addr = file_addr * blocksize;
+ 
++#ifndef	__MINGW32__
+ /* Now setup the keyboard for single character input. */
+ #ifdef USE_V7_TTY
+ 	if (ioctl(STDIN_FILENO, TIOCGETP, &savetty) == -1) {
+@@ -655,6 +681,7 @@ main(argc, argv)
+ 	newtty.c_lflag   &= ~ECHO;
+ 	newtty.c_cc[VMIN] = 1;
+ #endif
++#endif	/* __MINGW32__ */
+ 	set_tty();
+ #ifdef	SIGTSTP
+ 	signal(SIGTSTP, onsusp);
+@@ -665,7 +692,11 @@ main(argc, argv)
+ 		if (file_addr < 0)
+ 			file_addr = (off_t)0;
+ 		showblock(1);
++#ifndef	__MINGW32__
+ 		read(STDIN_FILENO, &c, 1);
++#else
++		c = getch();
++#endif
+ 		if (c == 'a')
+ 			file_addr -= blocksize;
+ 		if (c == 'b')
+diff -rupN cdrtools-2.01.nls/mkisofs/diag/isoinfo.c cdrtools-2.01.md5/mkisofs/diag/isoinfo.c
+--- cdrtools-2.01.nls/mkisofs/diag/isoinfo.c	2011-03-20 15:19:02.578125000 +0800
++++ cdrtools-2.01.md5/mkisofs/diag/isoinfo.c	2011-03-20 15:00:14.515625000 +0800
+@@ -59,8 +59,8 @@ static	char sccsid[] =
+ 
+ #include <unls.h>
+ 
+-#if	defined(__CYGWIN32__) || defined(__EMX__) || defined(__DJGPP__)
+-#include <io.h>					/* for setmode() prototype */
++#ifdef	NEED_O_BINARY
++#include <io.h>		/* for setmode() prototype */
+ #endif
+ 
+ /*
+@@ -652,7 +652,7 @@ extract_file(idr)
+ 	int		extent, len, tlen;
+ 	unsigned char	buff[2048];
+ 
+-#if	defined(__CYGWIN32__) || defined(__CYGWIN__) || defined(__EMX__) || defined(__DJGPP__)
++#ifdef	NEED_O_BINARY
+ 	setmode(fileno(stdout), O_BINARY);
+ #endif
+ 
+@@ -864,7 +864,17 @@ main(argc, argv)
+ 	int	bootcat_offset = 0;
+ 
+ 
++#ifdef	__DJGPP__
++	/* Get time zone information from TZ environment variable */
++	tzset();
++#endif
++#ifdef	__MINGW32__
++	__mgw32__init(argv[0]);
++#endif
+ 	save_args(argc, argv);
++#if	defined(__DJGPP__) || defined(__MINGW32__)
++	set_progname("isoinfo");
++#endif
+ 
+ 	cac = argc - 1;
+ 	cav = argv + 1;
+@@ -884,7 +894,7 @@ main(argc, argv)
+ 	if (help)
+ 		usage(0);
+ 	if (prvers) {
+-		printf("isoinfo %s (%s-%s-%s)\n", "2.01",
++		printf("isoinfo %s (%s-%s-%s)\n", "2.01-bootcd.ru",
+ 					HOST_CPU, HOST_VENDOR, HOST_OS);
+ 		exit(0);
+ 	}
+@@ -900,7 +910,7 @@ main(argc, argv)
+ #if	(defined(__CYGWIN32__) || defined(__CYGWIN__) || defined(__DJGPP__)) && !defined(IS_CYGWIN_1)
+ 		nls = load_nls("cp437");
+ #else
+-		nls = load_nls("iso8859-1");
++		nls = load_nls("iso8859-1");	/* also for __MINGW32__ */
+ #endif
+ 	} else {
+ 		if (strcmp(charset, "default") == 0)
+diff -rupN cdrtools-2.01.nls/mkisofs/diag/isovfy.c cdrtools-2.01.md5/mkisofs/diag/isovfy.c
+--- cdrtools-2.01.nls/mkisofs/diag/isovfy.c	2004-09-09 01:28:58.000000000 +0800
++++ cdrtools-2.01.md5/mkisofs/diag/isovfy.c	2011-03-20 15:00:14.593750000 +0800
+@@ -697,7 +697,17 @@ main(argc, argv)
+ 	int	typem_extent;
+ 	int	path_table_size;
+ 
++#ifdef	__DJGPP__
++	/* Get time zone information from TZ environment variable */
++	tzset();
++#endif
++#ifdef	__MINGW32__
++	__mgw32__init(argv[0]);
++#endif
+ 	save_args(argc, argv);
++#if	defined(__DJGPP__) || defined(__MINGW32__)
++	set_progname("isovfy");
++#endif
+ 
+ 	cac = argc - 1;
+ 	cav = argv + 1;
+@@ -709,7 +719,7 @@ main(argc, argv)
+ 	if (help)
+ 		usage(0);
+ 	if (prvers) {
+-		printf("isovfy %s (%s-%s-%s)\n", "2.01",
++		printf("isovfy %s (%s-%s-%s)\n", "2.01-bootcd.ru",
+ 					HOST_CPU, HOST_VENDOR, HOST_OS);
+ 		exit(0);
+ 	}
+diff -rupN cdrtools-2.01.nls/mkisofs/hash.c cdrtools-2.01.md5/mkisofs/hash.c
+--- cdrtools-2.01.nls/mkisofs/hash.c	2004-07-02 19:33:20.000000000 +0800
++++ cdrtools-2.01.md5/mkisofs/hash.c	2011-03-20 15:00:14.625000000 +0800
+@@ -46,6 +46,8 @@ static	char sccsid[] =
+  * allow to disable the mkisofs inode cache.
+  */
+ 
++/* DUPLICATES_ONCE Alex Kopylov cdrtools@bootcd.ru 19.06.2004 */
++
+ #include <mconfig.h>
+ #include "mkisofs.h"
+ #include <schily.h>
+@@ -56,8 +58,18 @@ static	char sccsid[] =
+ 
+ static struct file_hash *hash_table[NR_HASH] = {0, };
+ 
++#ifdef	DUPLICATES_ONCE
++
++#define	MD5_FAST_SIZE	65536
++
++#define	UNIQUE_FILES_HASH_FN(SIZE)	(SIZE % NR_HASH)
++
++static struct file_hash *unique_files_hash_table[NR_HASH] = {0, };
++
++#endif
++
+ EXPORT	void		add_hash	__PR((struct directory_entry *spnt));
+-EXPORT	struct file_hash *find_hash	__PR((dev_t dev, ino_t inode));
++EXPORT	struct file_hash *find_hash	__PR((struct directory_entry *spnt));
+ EXPORT	void		flush_hash	__PR((void));
+ EXPORT	void		add_directory_hash __PR((dev_t dev, ino_t inode));
+ EXPORT	struct file_hash *find_directory_hash __PR((dev_t dev, ino_t inode));
+@@ -67,6 +79,10 @@ EXPORT	struct directory_entry *find_file
+ LOCAL	BOOL		isoname_endsok	__PR((char *name));
+ EXPORT	int		delete_file_hash __PR((struct directory_entry *de));
+ EXPORT	void		flush_file_hash	__PR((void));
++#ifdef	DUPLICATES_ONCE
++LOCAL	struct directory_entry *compare_files __PR((struct directory_entry *spnt1, struct directory_entry *spnt2));
++LOCAL	unsigned char	*MD5File	__PR((char *name, size_t size));
++#endif
+ 
+ EXPORT void
+ add_hash(spnt)
+@@ -89,56 +105,91 @@ add_hash(spnt)
+ #endif
+ 		};
+ 
++#ifdef	DUPLICATES_ONCE
++	if (!cache_inodes && !duplicates_once)
++#else
+ 	if (!cache_inodes)
++#endif
+ 		return;
+ 	if (spnt->dev == (dev_t) UNCACHED_DEVICE ||
+ 				spnt->inode == UNCACHED_INODE) {
+ 		return;
+ 	}
+-	hash_number = HASH_FN((unsigned int) spnt->dev,
+-						(unsigned int) spnt->inode);
+ 
+ #if 0
+ 	if (verbose > 1)
+ 		fprintf(stderr, "%s ", spnt->name);
+ #endif
+ 	s_hash = (struct file_hash *) e_malloc(sizeof (struct file_hash));
+-	s_hash->next = hash_table[hash_number];
++#ifdef	DUPLICATES_ONCE
++	if (cache_inodes) {
++#endif
++		hash_number = HASH_FN((unsigned int) spnt->dev,
++						(unsigned int) spnt->inode);
++		s_hash->next = hash_table[hash_number];
++		hash_table[hash_number] = s_hash;
++#ifdef	DUPLICATES_ONCE
++	} else
++		s_hash->next = NULL;
++	if (duplicates_once && spnt->size && !(spnt->isorec.flags[0] & ISO_DIRECTORY)) {
++		hash_number = UNIQUE_FILES_HASH_FN((unsigned int) spnt->size);
++		s_hash->unique_files_next = unique_files_hash_table[hash_number];
++		unique_files_hash_table[hash_number] = s_hash;
++	} else
++		s_hash->unique_files_next = NULL;
++#endif
+ 	s_hash->inode = spnt->inode;
+ 	s_hash->dev = spnt->dev;
+ 	s_hash->starting_block = spnt->starting_block;
+ 	s_hash->size = spnt->size;
+-#ifdef SORTING
++#if	defined(SORTING) || defined(DUPLICATES_ONCE)
+ 	s_hash->de = spnt;
+ #endif /* SORTING */
+-	hash_table[hash_number] = s_hash;
+ }
+ 
+ #ifdef	PROTOTYPES
+ EXPORT struct file_hash *
+-find_hash(dev_t dev, ino_t inode)
++find_hash(struct directory_entry *spnt)
+ #else
+ EXPORT struct file_hash *
+-find_hash(dev, inode)
+-	dev_t	dev;
+-	ino_t	inode;
++find_hash(spnt)
++	struct directory_entry	*spnt;
+ #endif
+ {
+ 	unsigned int    hash_number;
+-	struct file_hash *spnt;
++	struct file_hash *spnt_ret;
+ 
++#ifdef	DUPLICATES_ONCE
++	if (!cache_inodes && !duplicates_once)
++#else
+ 	if (!cache_inodes)
++#endif
+ 		return (NULL);
+-	if (dev == (dev_t) UNCACHED_DEVICE || inode == UNCACHED_INODE)
++	if (spnt->dev == (dev_t) UNCACHED_DEVICE || spnt->inode == UNCACHED_INODE)
+ 		return (NULL);
+ 
+-	hash_number = HASH_FN((unsigned int) dev, (unsigned int) inode);
+-	spnt = hash_table[hash_number];
+-	while (spnt) {
+-		if (spnt->inode == inode && spnt->dev == dev)
+-			return (spnt);
+-		spnt = spnt->next;
+-	};
++#ifdef	DUPLICATES_ONCE
++	if (cache_inodes) {
++#endif
++		hash_number = HASH_FN((unsigned int) spnt->dev, (unsigned int) spnt->inode);
++		spnt_ret = hash_table[hash_number];
++		while (spnt_ret) {
++			if (spnt->inode == spnt_ret->inode && spnt->dev == spnt_ret->dev)
++				return (spnt_ret);
++			spnt_ret = spnt_ret->next;
++		}
++#ifdef	DUPLICATES_ONCE
++	}
++	if (duplicates_once && spnt->size && !(spnt->isorec.flags[0] & ISO_DIRECTORY)) {
++		hash_number = UNIQUE_FILES_HASH_FN((unsigned int) spnt->size);
++		spnt_ret = unique_files_hash_table[hash_number];
++		while (spnt_ret) {
++			if (compare_files(spnt, spnt_ret->de))
++				return (spnt_ret);
++			spnt_ret = spnt_ret->unique_files_next;
++		}
++	}
++#endif
+ 	return (NULL);
+ }
+ 
+@@ -152,18 +203,108 @@ flush_hash()
+ 	struct file_hash	*fh;
+ 	struct file_hash	*fh1;
+ 	int			i;
++	struct file_hash	**ht = hash_table;
++#ifdef	DUPLICATES_ONCE
++	struct file_hash	**ht1 = unique_files_hash_table;
++
++	if (!cache_inodes) {
++		ht = unique_files_hash_table;
++		ht1 = hash_table;
++	}
++#endif
+ 
+ 	for (i = 0; i < NR_HASH; i++) {
+-		fh = hash_table[i];
++		fh = ht[i];
+ 		while (fh) {
+ 			fh1 = fh->next;
+ 			free(fh);
+ 			fh = fh1;
+ 		}
+-		hash_table[i] = NULL;
++		ht[i] = NULL;
++#ifdef	DUPLICATES_ONCE
++		ht1[i] = NULL;
++#endif
++	}
++}
++
++#ifdef	DUPLICATES_ONCE
++
++LOCAL struct directory_entry *
++compare_files(spnt1, spnt2)
++	struct directory_entry	*spnt1;
++	struct directory_entry	*spnt2;
++{
++	if(spnt1->size != spnt2->size)
++		return (NULL);
++
++	if(!spnt1->md5_fast)
++		if(!(spnt1->md5_fast = MD5File(spnt1->whole_name,
++			(spnt1->size > MD5_FAST_SIZE) ? MD5_FAST_SIZE : spnt1->size)))
++			return (NULL);
++
++	if(spnt1->size <= MD5_FAST_SIZE) 
++		spnt1->md5_full = spnt1->md5_fast;
++
++	if(!spnt2->md5_fast)
++		if(!(spnt2->md5_fast = MD5File(spnt2->whole_name,
++			(spnt2->size > MD5_FAST_SIZE) ? MD5_FAST_SIZE : spnt2->size)))
++			return (NULL);
++
++	if(spnt2->size <= MD5_FAST_SIZE) 
++		spnt2->md5_full = spnt2->md5_fast;
++	
++	if(memcmp(spnt1->md5_fast, spnt2->md5_fast, 16*sizeof(unsigned char)))
++		return (NULL);
++	
++	if(!spnt1->md5_full)
++		if(!(spnt1->md5_full = MD5File(spnt1->whole_name, spnt1->size)))
++			return (NULL);
++
++	if(!spnt2->md5_full)
++		if(!(spnt2->md5_full = MD5File(spnt2->whole_name, spnt2->size)))
++			return (NULL);
++
++	if(memcmp(spnt1->md5_full, spnt2->md5_full, 16*sizeof(unsigned char)))
++		return (NULL);
++
++	return (spnt2);
++}
++
++LOCAL unsigned char *
++MD5File(name, size)
++	char		*name;
++	size_t		size;
++{
++	MD5_CTX		md5_ctx;
++	FILE		*infile;
++	unsigned char	buf[32768];
++	unsigned char	*md5hash;
++	size_t		cnt;
++	
++	MD5Init(&md5_ctx);
++
++	if((infile = fopen(name, "rb")) == NULL)
++		return (NULL);
++
++	while(size) {
++		cnt = (size > sizeof(buf)) ? sizeof(buf) : size;
++		if ((cnt = fread(buf, 1, cnt, infile)) <= 0) {
++			fclose(infile);
++			return (NULL);
++		}
++		MD5Update(&md5_ctx, buf, cnt);
++		size -= cnt;
+ 	}
++
++	fclose(infile);
++
++	md5hash = e_malloc(sizeof(unsigned char)*16);
++	MD5Final(md5hash, &md5_ctx);
++	return (md5hash);
+ }
+ 
++#endif
++
+ static struct file_hash *directory_hash_table[NR_HASH] = {0, };
+ 
+ #ifdef	PROTOTYPES
+diff -rupN cdrtools-2.01.nls/mkisofs/joliet.c cdrtools-2.01.md5/mkisofs/joliet.c
+--- cdrtools-2.01.nls/mkisofs/joliet.c	2011-03-20 15:19:02.625000000 +0800
++++ cdrtools-2.01.md5/mkisofs/joliet.c	2011-03-20 15:00:00.000000000 +0800
+@@ -162,12 +162,16 @@ conv_charset(src, dst, srclen, dstlen, i
+ 	wchar_t  wc;
+ 
+ 	if ((*srclen = inls->char2uni(src, *srclen, &wc)) > 0)
+-		if ((*dstlen = onls->uni2char(wc, dst, *dstlen)) > 0)
++		if ((*dstlen = onls->uni2char(wc, dst, *dstlen)) == 1)
+ 			return;
+ 
+ 	*srclen =  1;
+ 	*dstlen =  1;
+-	*dst = '_';
++	if (cjk4unx_filenames) {
++		*dst = *src; 
++		} else { 
++		*dst = '_'; 
++		}
+ }
+ 
+ /*
+@@ -225,31 +229,31 @@ convert_to_unicode(buffer, size, source,
+ 	p = tmpbuf;
+ 	while (i < size && *p) {
+ 		switch (*p) {
+-		case '*':
+-		case '/':
+-		case ':':
+-		case ';':
+-		case '?':
+-		case '\\':
+-			buffer[i++] = '\0';
+-			buffer[i++] = '_';
+-			p++;
+-			nr++;
+-			break;
+-
+-		default:
+-			n = inls->char2uni(p, 4, &wc);
+-			if (n > 0) {
+-				buffer[i++] = (wc >> 8) & 0xff;
+-				buffer[i++]   = wc & 0xff;
+-				p += n;
+-				nr += n;
+-			} else {
++			case '*':
++			case '/':
++			case ':':
++			case ';':
++			case '?':
++			case '\\':
+ 				buffer[i++] = '\0';
+ 				buffer[i++] = '_';
+ 				p++;
+ 				nr++;
+-			}
++				break;
++			
++			default:
++				n = inls->char2uni(p, 4, &wc);
++				if (n > 0) {
++					buffer[i++] = (wc >> 8) & 0xff;
++					buffer[i++]   = wc & 0xff;
++					p += n;
++					nr += n;
++				} else {
++					buffer[i++] = '\0';
++					buffer[i++] = '_';
++					p++;
++					nr++;
++				}
+ 		}
+ 	}
+ 
+@@ -345,26 +349,23 @@ get_joliet_vol_desc(jvol_desc)
+ 	 *  We probably will want to filter any characters >= 0x80.
+ 	 */
+ 	convert_to_unicode((Uchar *) jvol_desc->system_id,
+-			sizeof (jvol_desc->system_id), NULL, in_nls, NULL);
++		sizeof(jvol_desc->system_id), NULL, in_nls, NULL);
+ 	convert_to_unicode((Uchar *) jvol_desc->volume_id,
+-			sizeof (jvol_desc->volume_id), NULL, in_nls, NULL);
++		sizeof(jvol_desc->volume_id), volume_id, in_nls, NULL);
+ 	convert_to_unicode((Uchar *) jvol_desc->volume_set_id,
+-			sizeof (jvol_desc->volume_set_id), NULL, in_nls, NULL);
++		sizeof(jvol_desc->volume_set_id), NULL, in_nls, NULL);
+ 	convert_to_unicode((Uchar *) jvol_desc->publisher_id,
+-			sizeof (jvol_desc->publisher_id), NULL, in_nls, NULL);
++		sizeof(jvol_desc->publisher_id), NULL, in_nls, NULL);
+ 	convert_to_unicode((Uchar *) jvol_desc->preparer_id,
+-			sizeof (jvol_desc->preparer_id), NULL, in_nls, NULL);
++		sizeof(jvol_desc->preparer_id), NULL, in_nls, NULL);
+ 	convert_to_unicode((Uchar *) jvol_desc->application_id,
+-			sizeof (jvol_desc->application_id), NULL, in_nls, NULL);
++		sizeof(jvol_desc->application_id), NULL, in_nls, NULL);
+ 	convert_to_unicode((Uchar *) jvol_desc->copyright_file_id,
+-			sizeof (jvol_desc->copyright_file_id), NULL, in_nls,
+-			NULL);
++		sizeof(jvol_desc->copyright_file_id), NULL, in_nls, NULL);
+ 	convert_to_unicode((Uchar *) jvol_desc->abstract_file_id,
+-			sizeof (jvol_desc->abstract_file_id), NULL, in_nls,
+-			NULL);
++		sizeof(jvol_desc->abstract_file_id), NULL, in_nls, NULL);
+ 	convert_to_unicode((Uchar *) jvol_desc->bibliographic_file_id,
+-			sizeof (jvol_desc->bibliographic_file_id), NULL, in_nls,
+-			NULL);
++		sizeof(jvol_desc->bibliographic_file_id), NULL, in_nls, NULL);
+ }
+ 
+ static void
+diff -rupN cdrtools-2.01.nls/mkisofs/md5.h cdrtools-2.01.md5/mkisofs/md5.h
+--- cdrtools-2.01.nls/mkisofs/md5.h	1970-01-01 08:00:00.000000000 +0800
++++ cdrtools-2.01.md5/mkisofs/md5.h	2011-03-20 15:00:14.625000000 +0800
+@@ -0,0 +1,36 @@
++/* @(#)md5.h	1.2 99/12/19 Copyright 1998,1999 Heiko Eissfeldt */
++/* MD5.H - header file for MD5C.C
++ */
++
++/* Copyright (C) 1991-2, RSA Data Security, Inc. Created 1991. All
++rights reserved.
++
++License to copy and use this software is granted provided that it
++is identified as the "RSA Data Security, Inc. MD5 Message-Digest
++Algorithm" in all material mentioning or referencing this software
++or this function.
++
++License is also granted to make and use derivative works provided
++that such works are identified as "derived from the RSA Data
++Security, Inc. MD5 Message-Digest Algorithm" in all material
++mentioning or referencing the derived work.
++
++RSA Data Security, Inc. makes no representations concerning either
++the merchantability of this software or the suitability of this
++software for any particular purpose. It is provided "as is"
++without express or implied warranty of any kind.
++
++These notices must be retained in any copies of any part of this
++documentation and/or software.
++ */
++
++/* MD5 context. */
++typedef struct {
++  UINT4 state[4];                                   /* state (ABCD) */
++  UINT4 count[2];        /* number of bits, modulo 2^64 (lsb first) */
++  unsigned char buffer[64];                         /* input buffer */
++} MD5_CTX;
++
++void MD5Init __PR((MD5_CTX *));
++void MD5Update __PR((MD5_CTX *, unsigned char *, unsigned int));
++void MD5Final __PR((unsigned char [16], MD5_CTX *));
+diff -rupN cdrtools-2.01.nls/mkisofs/md5c.c cdrtools-2.01.md5/mkisofs/md5c.c
+--- cdrtools-2.01.nls/mkisofs/md5c.c	1970-01-01 08:00:00.000000000 +0800
++++ cdrtools-2.01.md5/mkisofs/md5c.c	2011-03-20 15:00:14.625000000 +0800
+@@ -0,0 +1,340 @@
++/* @(#)md5c.c	1.3 02/05/21 Copyright 1998,1999 Heiko Eissfeldt */
++#ifndef lint
++static char     sccsid[] =
++"@(#)md5c.c	1.3 02/05/21 Copyright 1998,1999 Heiko Eissfeldt";
++
++#endif
++/* MD5C.C - RSA Data Security, Inc., MD5 message-digest algorithm
++ */
++
++/* Copyright (C) 1991-2, RSA Data Security, Inc. Created 1991. All
++rights reserved.
++
++License to copy and use this software is granted provided that it
++is identified as the "RSA Data Security, Inc. MD5 Message-Digest
++Algorithm" in all material mentioning or referencing this software
++or this function.
++
++License is also granted to make and use derivative works provided
++that such works are identified as "derived from the RSA Data
++Security, Inc. MD5 Message-Digest Algorithm" in all material
++mentioning or referencing the derived work.
++
++RSA Data Security, Inc. makes no representations concerning either
++the merchantability of this software or the suitability of this
++software for any particular purpose. It is provided "as is"
++without express or implied warranty of any kind.
++
++These notices must be retained in any copies of any part of this
++documentation and/or software.
++ */
++
++#include "config.h"
++#include "mytype.h"
++#include "md5.h"
++
++/* Constants for MD5Transform routine.
++ */
++#define S11 7L
++#define S12 12L
++#define S13 17L
++#define S14 22L
++#define S21 5L
++#define S22 9L
++#define S23 14L
++#define S24 20L
++#define S31 4L
++#define S32 11L
++#define S33 16L
++#define S34 23L
++#define S41 6L
++#define S42 10L
++#define S43 15L
++#define S44 21L
++
++typedef unsigned char * POINTER;
++
++static void MD5Transform __PR((UINT4 [4], unsigned char [64]));
++static void Encode __PR((unsigned char *, UINT4 *, unsigned int));
++static void Decode __PR((UINT4 *, unsigned char *, unsigned int));
++static void MD5_memcpy __PR((POINTER, POINTER, unsigned int));
++static void MD5_memset __PR((POINTER, int, unsigned int));
++
++static unsigned char PADDING[64] = {
++  0x80, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
++  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
++  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
++};
++
++/* F, G, H and I are basic MD5 functions.
++ */
++#define F(x, y, z) (((x) & (y)) | ((~x) & (z)))
++#define G(x, y, z) (((x) & (z)) | ((y) & (~z)))
++#define H(x, y, z) ((x) ^ (y) ^ (z))
++#define I(x, y, z) ((y) ^ ((x) | (~z)))
++
++/* ROTATE_LEFT rotates x left n bits.
++ */
++#define ROTATE_LEFT(x, n) (((x) << (n)) | ((x) >> (32L-(n))))
++
++/* FF, GG, HH, and II transformations for rounds 1, 2, 3, and 4.
++Rotation is separate from addition to prevent recomputation.
++ */
++#define FF(a, b, c, d, x, s, ac) { \
++ (a) += F ((b), (c), (d)) + (x) + (UINT4)(ac); \
++ (a) = ROTATE_LEFT ((a), (s)); \
++ (a) += (b); \
++  }
++#define GG(a, b, c, d, x, s, ac) { \
++ (a) += G ((b), (c), (d)) + (x) + (UINT4)(ac); \
++ (a) = ROTATE_LEFT ((a), (s)); \
++ (a) += (b); \
++  }
++#define HH(a, b, c, d, x, s, ac) { \
++ (a) += H ((b), (c), (d)) + (x) + (UINT4)(ac); \
++ (a) = ROTATE_LEFT ((a), (s)); \
++ (a) += (b); \
++  }
++#define II(a, b, c, d, x, s, ac) { \
++ (a) += I ((b), (c), (d)) + (x) + (UINT4)(ac); \
++ (a) = ROTATE_LEFT ((a), (s)); \
++ (a) += (b); \
++  }
++
++/* MD5 initialization. Begins an MD5 operation, writing a new context.
++ */
++void MD5Init (context)
++MD5_CTX *context;                                        /* context */
++{
++  context->count[0] = context->count[1] = 0;
++  /* Load magic initialization constants.
++*/
++  context->state[0] = UINT4_C(0x67452301);
++  context->state[1] = UINT4_C(0xefcdab89);
++  context->state[2] = UINT4_C(0x98badcfe);
++  context->state[3] = UINT4_C(0x10325476);
++}
++
++/* MD5 block update operation. Continues an MD5 message-digest
++  operation, processing another message block, and updating the
++  context.
++ */
++void MD5Update (context, input, inputLen)
++MD5_CTX *context;                                        /* context */
++unsigned char *input;                                /* input block */
++unsigned int inputLen;                     /* length of input block */
++{
++  unsigned int i, indx, partLen;
++
++  /* Compute number of bytes mod 64 */
++  indx = (unsigned int)((context->count[0] >> 3L) & 0x3F);
++
++  /* Update number of bits */
++  if ((context->count[0] += ((UINT4)inputLen << 3L))
++   < ((UINT4)inputLen << 3L))
++ context->count[1]++;
++  context->count[1] += ((UINT4)inputLen >> 29L);
++
++  partLen = 64 - indx;
++
++  /* Transform as many times as possible.
++*/
++  if (inputLen >= partLen) {
++ MD5_memcpy
++   ((POINTER)&context->buffer[indx], (POINTER)input, partLen);
++ MD5Transform (context->state, context->buffer);
++
++ for (i = partLen; i + 63 < inputLen; i += 64)
++   MD5Transform (context->state, &input[i]);
++
++ indx = 0;
++  }
++  else
++ i = 0;
++
++  /* Buffer remaining input */
++  MD5_memcpy
++ ((POINTER)&context->buffer[indx], (POINTER)&input[i],
++  inputLen-i);
++}
++
++/* MD5 finalization. Ends an MD5 message-digest operation, writing the
++  the message digest and zeroizing the context.
++ */
++void MD5Final (digest, context)
++unsigned char digest[16];                         /* message digest */
++MD5_CTX *context;                                       /* context */
++{
++  unsigned char bits[8];
++  unsigned int indx, padLen;
++
++  /* Save number of bits */
++  Encode (bits, context->count, 8);
++
++  /* Pad out to 56 mod 64.
++*/
++  indx = (unsigned int)((context->count[0] >> 3L) & 0x3f);
++  padLen = (indx < 56) ? (56 - indx) : (120 - indx);
++  MD5Update (context, PADDING, padLen);
++
++  /* Append length (before padding) */
++  MD5Update (context, bits, 8);
++  /* Store state in digest */
++  Encode (digest, context->state, 16);
++
++  /* Zeroize sensitive information.
++*/
++  MD5_memset ((POINTER)context, 0, sizeof (*context));
++}
++
++/* MD5 basic transformation. Transforms state based on block.
++ */
++static void MD5Transform (state, block)
++UINT4 state[4];
++unsigned char block[64];
++{
++  UINT4 a = state[0], b = state[1], c = state[2], d = state[3], x[16];
++
++  Decode (x, block, 64);
++
++  /* Round 1 */
++  FF (a, b, c, d, x[ 0], S11, UINT4_C(0xd76aa478)); /* 1 */
++  FF (d, a, b, c, x[ 1], S12, UINT4_C(0xe8c7b756)); /* 2 */
++  FF (c, d, a, b, x[ 2], S13, UINT4_C(0x242070db)); /* 3 */
++  FF (b, c, d, a, x[ 3], S14, UINT4_C(0xc1bdceee)); /* 4 */
++  FF (a, b, c, d, x[ 4], S11, UINT4_C(0xf57c0faf)); /* 5 */
++  FF (d, a, b, c, x[ 5], S12, UINT4_C(0x4787c62a)); /* 6 */
++  FF (c, d, a, b, x[ 6], S13, UINT4_C(0xa8304613)); /* 7 */
++  FF (b, c, d, a, x[ 7], S14, UINT4_C(0xfd469501)); /* 8 */
++  FF (a, b, c, d, x[ 8], S11, UINT4_C(0x698098d8)); /* 9 */
++  FF (d, a, b, c, x[ 9], S12, UINT4_C(0x8b44f7af)); /* 10 */
++  FF (c, d, a, b, x[10], S13, UINT4_C(0xffff5bb1)); /* 11 */
++  FF (b, c, d, a, x[11], S14, UINT4_C(0x895cd7be)); /* 12 */
++  FF (a, b, c, d, x[12], S11, UINT4_C(0x6b901122)); /* 13 */
++  FF (d, a, b, c, x[13], S12, UINT4_C(0xfd987193)); /* 14 */
++  FF (c, d, a, b, x[14], S13, UINT4_C(0xa679438e)); /* 15 */
++  FF (b, c, d, a, x[15], S14, UINT4_C(0x49b40821)); /* 16 */
++
++ /* Round 2 */
++  GG (a, b, c, d, x[ 1], S21, UINT4_C(0xf61e2562)); /* 17 */
++  GG (d, a, b, c, x[ 6], S22, UINT4_C(0xc040b340)); /* 18 */
++  GG (c, d, a, b, x[11], S23, UINT4_C(0x265e5a51)); /* 19 */
++  GG (b, c, d, a, x[ 0], S24, UINT4_C(0xe9b6c7aa)); /* 20 */
++  GG (a, b, c, d, x[ 5], S21, UINT4_C(0xd62f105d)); /* 21 */
++  GG (d, a, b, c, x[10], S22, UINT4_C( 0x2441453)); /* 22 */
++  GG (c, d, a, b, x[15], S23, UINT4_C(0xd8a1e681)); /* 23 */
++  GG (b, c, d, a, x[ 4], S24, UINT4_C(0xe7d3fbc8)); /* 24 */
++  GG (a, b, c, d, x[ 9], S21, UINT4_C(0x21e1cde6)); /* 25 */
++  GG (d, a, b, c, x[14], S22, UINT4_C(0xc33707d6)); /* 26 */
++  GG (c, d, a, b, x[ 3], S23, UINT4_C(0xf4d50d87)); /* 27 */
++  GG (b, c, d, a, x[ 8], S24, UINT4_C(0x455a14ed)); /* 28 */
++  GG (a, b, c, d, x[13], S21, UINT4_C(0xa9e3e905)); /* 29 */
++  GG (d, a, b, c, x[ 2], S22, UINT4_C(0xfcefa3f8)); /* 30 */
++  GG (c, d, a, b, x[ 7], S23, UINT4_C(0x676f02d9)); /* 31 */
++  GG (b, c, d, a, x[12], S24, UINT4_C(0x8d2a4c8a)); /* 32 */
++
++  /* Round 3 */
++  HH (a, b, c, d, x[ 5], S31, UINT4_C(0xfffa3942)); /* 33 */
++  HH (d, a, b, c, x[ 8], S32, UINT4_C(0x8771f681)); /* 34 */
++  HH (c, d, a, b, x[11], S33, UINT4_C(0x6d9d6122)); /* 35 */
++  HH (b, c, d, a, x[14], S34, UINT4_C(0xfde5380c)); /* 36 */
++  HH (a, b, c, d, x[ 1], S31, UINT4_C(0xa4beea44)); /* 37 */
++  HH (d, a, b, c, x[ 4], S32, UINT4_C(0x4bdecfa9)); /* 38 */
++  HH (c, d, a, b, x[ 7], S33, UINT4_C(0xf6bb4b60)); /* 39 */
++  HH (b, c, d, a, x[10], S34, UINT4_C(0xbebfbc70)); /* 40 */
++  HH (a, b, c, d, x[13], S31, UINT4_C(0x289b7ec6)); /* 41 */
++  HH (d, a, b, c, x[ 0], S32, UINT4_C(0xeaa127fa)); /* 42 */
++  HH (c, d, a, b, x[ 3], S33, UINT4_C(0xd4ef3085)); /* 43 */
++  HH (b, c, d, a, x[ 6], S34, UINT4_C( 0x4881d05)); /* 44 */
++  HH (a, b, c, d, x[ 9], S31, UINT4_C(0xd9d4d039)); /* 45 */
++  HH (d, a, b, c, x[12], S32, UINT4_C(0xe6db99e5)); /* 46 */
++  HH (c, d, a, b, x[15], S33, UINT4_C(0x1fa27cf8)); /* 47 */
++  HH (b, c, d, a, x[ 2], S34, UINT4_C(0xc4ac5665)); /* 48 */
++
++  /* Round 4 */
++  II (a, b, c, d, x[ 0], S41, UINT4_C(0xf4292244)); /* 49 */
++  II (d, a, b, c, x[ 7], S42, UINT4_C(0x432aff97)); /* 50 */
++  II (c, d, a, b, x[14], S43, UINT4_C(0xab9423a7)); /* 51 */
++  II (b, c, d, a, x[ 5], S44, UINT4_C(0xfc93a039)); /* 52 */
++  II (a, b, c, d, x[12], S41, UINT4_C(0x655b59c3)); /* 53 */
++  II (d, a, b, c, x[ 3], S42, UINT4_C(0x8f0ccc92)); /* 54 */
++  II (c, d, a, b, x[10], S43, UINT4_C(0xffeff47d)); /* 55 */
++  II (b, c, d, a, x[ 1], S44, UINT4_C(0x85845dd1)); /* 56 */
++  II (a, b, c, d, x[ 8], S41, UINT4_C(0x6fa87e4f)); /* 57 */
++  II (d, a, b, c, x[15], S42, UINT4_C(0xfe2ce6e0)); /* 58 */
++  II (c, d, a, b, x[ 6], S43, UINT4_C(0xa3014314)); /* 59 */
++  II (b, c, d, a, x[13], S44, UINT4_C(0x4e0811a1)); /* 60 */
++  II (a, b, c, d, x[ 4], S41, UINT4_C(0xf7537e82)); /* 61 */
++  II (d, a, b, c, x[11], S42, UINT4_C(0xbd3af235)); /* 62 */
++  II (c, d, a, b, x[ 2], S43, UINT4_C(0x2ad7d2bb)); /* 63 */
++  II (b, c, d, a, x[ 9], S44, UINT4_C(0xeb86d391)); /* 64 */
++
++  state[0] += a;
++  state[1] += b;
++  state[2] += c;
++  state[3] += d;
++
++  /* Zeroize sensitive information.
++*/
++  MD5_memset ((POINTER)x, 0, sizeof (x));
++}
++
++/* Encodes input (UINT4) into output (unsigned char). Assumes len is
++  a multiple of 4.
++ */
++static void Encode (output, input, len)
++unsigned char *output;
++UINT4 *input;
++unsigned int len;
++{
++  unsigned int i, j;
++
++  for (i = 0, j = 0; j < len; i++, j += 4) {
++ output[j] = (unsigned char)(input[i] & 0xff);
++ output[j+1] = (unsigned char)((input[i] >> 8L) & 0xff);
++ output[j+2] = (unsigned char)((input[i] >> 16L) & 0xff);
++ output[j+3] = (unsigned char)((input[i] >> 24L) & 0xff);
++  }
++}
++
++/* Decodes input (unsigned char) into output (UINT4). Assumes len is
++  a multiple of 4.
++ */
++static void Decode (output, input, len)
++UINT4 *output;
++unsigned char *input;
++unsigned int len;
++{
++  unsigned int i, j;
++
++  for (i = 0, j = 0; j < len; i++, j += 4)
++ output[i] = ((UINT4)input[j]) | (((UINT4)input[j+1]) << 8L) |
++   (((UINT4)input[j+2]) << 16L) | (((UINT4)input[j+3]) << 24L);
++}
++
++/* Note: Replace "for loop" with standard memcpy if possible.
++ */
++
++static void MD5_memcpy (output, input, len)
++POINTER output;
++POINTER input;
++unsigned int len;
++{
++  unsigned int i;
++
++  for (i = 0; i < len; i++)
++ output[i] = input[i];
++}
++
++/* Note: Replace "for loop" with standard memset if possible.
++ */
++static void MD5_memset (output, value, len)
++POINTER output;
++int value;
++unsigned int len;
++{
++  unsigned int i;
++
++  for (i = 0; i < len; i++)
++ ((char *)output)[i] = (char)value;
++}
+diff -rupN cdrtools-2.01.nls/mkisofs/mkisofs.c cdrtools-2.01.md5/mkisofs/mkisofs.c
+--- cdrtools-2.01.nls/mkisofs/mkisofs.c	2011-03-20 15:19:02.750000000 +0800
++++ cdrtools-2.01.md5/mkisofs/mkisofs.c	2011-03-20 15:00:00.000000000 +0800
+@@ -29,6 +29,12 @@ static	char sccsid[] =
+ 
+ /* APPLE_HYB James Pearson j.pearson@ge.ucl.ac.uk 22/2/2000 */
+ 
++/* DUPLICATES_ONCE Alex Kopylov cdrtools@bootcd.ru 19.06.2004 */
++
++/* NLS-CJK_FIX Japan NOBORU noboru2000@yahoo.co.jp 27.12.2004 */
++
++/* NLS-2-MD5 Wwashington http://code.google.com/p/mkisofs-md5 */
++
+ #include <mconfig.h>
+ #include "mkisofs.h"
+ #include <errno.h>
+@@ -47,6 +53,16 @@ static	char sccsid[] =
+ #include <io.h>					/* for setmode() prototype */
+ #endif
+ 
++#ifdef	__DJGPP__
++#include <time.h>				/* for tzset() prototype */
++#include <dpmi.h>				/* for dpmi prototypes */
++#endif
++
++#ifdef	__MINGW32__
++extern	char	*__mgw32__icharset	__PR((void));
++extern	char	*__mgw32__ocharset	__PR((void));
++#endif
++
+ #include "getopt.h"	/* Always include local (nonstandard) getopt.h */
+ 
+ #ifdef VMS
+@@ -62,7 +78,7 @@ static	char sccsid[] =
+ struct directory *root = NULL;
+ int		path_ind;
+ 
+-char	version_string[] = "mkisofs 2.01";
++char	version_string[] = "GNU Released by Joerg Schilling, Modified by Wwashington. With Great\nThanks To: Japan NOBORU(NLS-CJK Patch), Alex Kopylov(MD5-Opt Patch).\nmkisofs 2.01-bootcd.ru-cjk-md5";
+ 
+ char		*outfile;
+ FILE		*discimage;
+@@ -108,7 +124,7 @@ int	debug = 0;
+ int	gui = 0;
+ int	all_files = 1;	/* New default is to include all files */
+ int	follow_links = 0;
+-#ifdef	IS_CYGWIN
++#if	defined(IS_CYGWIN) || defined(__MINGW32__)
+ int	cache_inodes = 0; /* Do not cache inodes on Cygwin by default */
+ #else
+ int	cache_inodes = 1; /* Cache inodes if OS has unique inodes */
+@@ -162,6 +178,8 @@ int	iso9660_level = 1;
+ int	iso9660_namelen = LEN_ISONAME; /* 31 characters, may be set to 37 */
+ int	full_iso9660_filenames = 0; /* Full 31 character iso9660 filenames */
+ int	relaxed_filenames = 0;	/* For Amiga.  Disc will not work with DOS */
++int	cjk4dos_filenames = 0;	/* For GbChs.  Disc possible work with DOS */
++int	cjk4unx_filenames = 0;	/* For GbChs.  Disc possible work with DOS */
+ int	allow_lowercase = 0;	/* Allow lower case letters */
+ int	allow_multidot = 0;	/* Allow more than on dot in filename */
+ int	iso_translate = 1;	/* 1 == enables '#', '-' and '~' removal */
+@@ -223,6 +241,14 @@ int	dvd_video = 0;
+ int	do_sort = 0;		/* sort file data */
+ #endif /* SORTING */
+ 
++#ifdef	DUPLICATES_ONCE
++int	duplicates_once = 0;	/* encode duplicate files once */
++#endif
++
++#ifdef	FORCE_UPPERCASE
++int	force_uppercase = 0;	/* Force upper cased names */
++#endif
++
+ struct nls_table *in_nls = NULL;  /* input UNICODE conversion table */
+ struct nls_table *out_nls = NULL; /* output UNICODE conversion table */
+ #ifdef APPLE_HYB
+@@ -329,6 +355,8 @@ struct ld_option {
+ #define	OPTION_ISO_TRANSLATE		1041
+ #define	OPTION_ISO_LEVEL		1042
+ #define	OPTION_RELAXED_FILENAMES	1043
++#define OPTION_CJK4DOS_FILENAMES	1098
++#define OPTION_CJK4UNX_FILENAMES	1099
+ #define	OPTION_ALLOW_LOWERCASE		1044
+ #define	OPTION_ALLOW_MULTIDOT		1045
+ #define	OPTION_USE_FILEVERSION		1046
+@@ -432,6 +460,14 @@ struct ld_option {
+ 
+ #endif	/* APPLE_HYB */
+ 
++#ifdef	DUPLICATES_ONCE
++#define	OPTION_DUPLICATES_ONCE		2500
++#endif /* DUPLICATES_ONCE */
++
++#ifdef	FORCE_UPPERCASE
++#define	OPTION_FORCE_UPPERCASE		2600
++#endif /* FORCE_UPPERCASE */
++
+ LOCAL int	save_pname = 0;
+ 
+ LOCAL const struct ld_option ld_options[] =
+@@ -450,6 +486,10 @@ LOCAL const struct ld_option ld_options[
+ 	'\0', NULL, "Cache inodes (needed to detect hard links)", ONE_DASH},
+ 	{{"no-cache-inodes", no_argument, NULL, OPTION_NOCACHE_INODES},
+ 	'\0', NULL, "Do not cache inodes (if filesystem has no unique unides)", ONE_DASH},
++#ifdef	DUPLICATES_ONCE
++	{{"duplicates-once", no_argument, NULL, OPTION_DUPLICATES_ONCE},
++	'\0', NULL, "Optimize storage by encoding duplicate files once", ONE_DASH},
++#endif
+ 	{{"check-oldnames", no_argument, NULL, OPTION_CHECK_OLDNAMES},
+ 	'\0', NULL, "Check all imported ISO9660 names from old session", ONE_DASH},
+ 	{{"check-session", required_argument, NULL, OPTION_CHECK_SESSION},
+@@ -630,10 +670,18 @@ LOCAL const struct ld_option ld_options[
+ 	'U', NULL, "Allow Untranslated filenames (for HPUX & AIX - violates ISO9660). Forces -l, -d, -N, -allow-leading-dots, -relaxed-filenames, -allow-lowercase, -allow-multidot", ONE_DASH},
+ 	{{"relaxed-filenames", no_argument, NULL, OPTION_RELAXED_FILENAMES},
+ 	'\0', NULL, "Allow 7 bit ASCII except lower case characters (violates ISO9660)", ONE_DASH},
++	{{"cjk4dos-filenames", no_argument, NULL, OPTION_CJK4DOS_FILENAMES},
++	'\0', NULL, "Allow 8 bit ASCII CJK standard code characters (violates ISO9660)", ONE_DASH},
++	{{"cjk4unx-filenames", no_argument, NULL, OPTION_CJK4UNX_FILENAMES},
++	'\0', NULL, "Allow 8 bit ASCII CJK standard code characters (violates ISO9660)", ONE_DASH},
+ 	{{"no-iso-translate", no_argument, NULL, OPTION_ISO_TRANSLATE},
+ 	'\0', NULL, "Do not translate illegal ISO characters '~', '-' and '#' (violates ISO9660)", ONE_DASH},
+ 	{{"allow-lowercase", no_argument, NULL, OPTION_ALLOW_LOWERCASE},
+ 	'\0', NULL, "Allow lower case characters in addition to the current character set (violates ISO9660)", ONE_DASH},
++#ifdef	FORCE_UPPERCASE
++	{{"force-uppercase", no_argument, NULL, OPTION_FORCE_UPPERCASE},
++	'\0', NULL, "Do not allow lower case characters", ONE_DASH},
++#endif
+ 	{{"allow-multidot", no_argument, NULL, OPTION_ALLOW_MULTIDOT},
+ 	'\0', NULL, "Allow more than one dot in filenames (e.g. .tar.gz) (violates ISO9660)", ONE_DASH},
+ 	{{"use-fileversion", no_argument, NULL, OPTION_USE_FILEVERSION},
+@@ -1206,11 +1254,21 @@ main(argc, argv)
+ #endif	/* APPLE_HYB */
+ 
+ 
++#ifdef	__DJGPP__
++	/* Get time zone information from TZ environment variable */
++	tzset();
++#endif
++#ifdef	__MINGW32__
++	__mgw32__init(argv[0]);
++#endif
+ #ifdef __EMX__
+ 	/* This gives wildcard expansion with Non-Posix shells with EMX */
+ 	_wildcard(&argc, &argv);
+ #endif
+-	save_args(argc, argv);
++ 	save_args(argc, argv);
++#if	defined(__DJGPP__) || defined(__MINGW32__)
++	set_progname("mkisofs");
++#endif
+ 
+ 	if (argc < 2) {
+ #ifdef	USE_LIBSCHILY
+@@ -1480,11 +1538,44 @@ main(argc, argv)
+ 			}
+ 			break;
+ 		case OPTION_CACHE_INODES:
++#ifdef	__MINGW32__
++/*
++ * Mingw32's .st_ino always 0
++ */
++#ifdef	USE_LIBSCHILY
++			errmsgno(EX_BAD,
++			"Warning: cannot -cache-inodes on this platform - ignoring.\n");
++#ifdef	DUPLICATES_ONCE
++			if (!duplicates_once)
++				errmsgno(EX_BAD,
++				"         Try to use -duplicates-once instead.\n");
++#endif
++#else
++			fprintf(stderr,
++			"Warning: cannot -cache-inodes on this platform - ignoring.\n");
++#ifdef	DUPLICATES_ONCE
++			if (!duplicates_once)
++				fprintf(stderr,
++				"         Try to use -duplicates-once instead.\n");
++#endif
++#endif
++#else
+ 			cache_inodes = 1;
++#endif
++			break;
++#ifdef	FORCE_UPPERCASE
++		case OPTION_FORCE_UPPERCASE:
++			force_uppercase++;
+ 			break;
++#endif
+ 		case OPTION_NOCACHE_INODES:
+ 			cache_inodes = 0;
+ 			break;
++#ifdef	DUPLICATES_ONCE
++		case OPTION_DUPLICATES_ONCE:
++			duplicates_once++;
++			break;
++#endif
+ 		case OPTION_CHECK_OLDNAMES:
+ 			check_oldnames++;
+ 			break;
+@@ -1492,7 +1583,11 @@ main(argc, argv)
+ 			check_session++;
+ 			check_oldnames++;
+ 			merge_image = optarg;
++#ifdef	__MINGW32__
++			outfile = "nul";
++#else
+ 			outfile = "/dev/null";
++#endif
+ 			/*
+ 			 * cdrecord_data is handled specially in multi.c
+ 			 * as we cannot write to all strings.
+@@ -1525,6 +1620,18 @@ main(argc, argv)
+ 			RR_relocation_depth = 32767;
+ 			break;
+ 		case 'f':
++#ifdef	__MINGW32__
++/*
++ * Mingw32 has no links
++ */
++#ifdef	USE_LIBSCHILY
++			errmsgno(EX_BAD,
++			"Warning: cannot -follow-links on this platform - ignoring.\n");
++#else
++			fprintf(stderr,
++			"Warning: cannot -follow-links on this platform - ignoring.\n");
++#endif
++#else
+ 			follow_links++;
+ #ifdef	USE_LIBSCHILY
+ 			errmsgno(EX_BAD,
+@@ -1533,6 +1640,7 @@ main(argc, argv)
+ 			fprintf(stderr,
+ 			"Warning: -follow-links does not always work correctly; be careful.\n");
+ #endif
++#endif
+ 			break;
+ 		case 'l':
+ 			full_iso9660_filenames++;
+@@ -1629,8 +1737,19 @@ main(argc, argv)
+ 			verbose = 0;
+ 			break;
+ 		case 'R':
++#ifdef	__MINGW32__
++/*
++ * Mingw32 has no UIDs, GIDs, file and directory modes
++ */
++#ifdef	USE_LIBSCHILY
++			errmsgno(EX_BAD, "Warning: -rock has same effect as -rational-rock on this platform.\n");
++#else
++			fprintf(stderr, "Warning: -rock has same effect as -rational-rock on this platform.\n");
++#endif
++#else
+ 			use_RockRidge++;
+ 			break;
++#endif
+ 		case 'r':
+ 			rationalize_all++;
+ 			use_RockRidge++;
+@@ -1848,6 +1967,14 @@ main(argc, argv)
+ 			relaxed_filenames++;
+ 			warn_violate++;
+ 			break;
++		case OPTION_CJK4DOS_FILENAMES:
++			cjk4dos_filenames++;
++			warn_violate++;
++			break;
++		case OPTION_CJK4UNX_FILENAMES:
++			cjk4unx_filenames++;
++			warn_violate++;
++			break;
+ 		case OPTION_ALLOW_LOWERCASE:
+ 			allow_lowercase++;
+ 			warn_violate++;
+@@ -2327,8 +2454,38 @@ parse_input_files:
+ 	init_nls();		/* Initialize UNICODE tables */
+ 
+ 	if (icharset == NULL) {
+-#if	(defined(__CYGWIN32__) || defined(__CYGWIN__) || defined(__DJGPP__)) && !defined(IS_CYGWIN_1)
++#if	(defined(__CYGWIN32__) || defined(__CYGWIN__) || defined(__DJGPP__) || defined(__MINGW32__)) && !defined(IS_CYGWIN_1)
++#if	defined(__DJGPP__) || defined(__MINGW32__)
++#ifdef	__DJGPP__
++		{
++			char		cpname[8];
++			__dpmi_regs	_regs;
++
++			memset(&_regs, 0, sizeof (_regs));
++			_regs.x.ax = 0x6601;
++			if (!__dpmi_simulate_real_mode_interrupt(0x21,  &_regs)) {
++				if (!(_regs.x.flags & 1)) {
++					sprintf(cpname, "cp%u", _regs.x.bx);
++					in_nls = load_nls(cpname);
++				}
++			}
++			if (!in_nls)
++				in_nls = load_nls("cp437");
++		}
++#endif
++#ifdef	__MINGW32__
++		{
++			char	*cpname = __mgw32__icharset();
++		
++			if (cpname)
++				in_nls = load_nls(cpname);
++			if (!in_nls)
++				in_nls = load_nls("iso8859-1");
++		}
++#endif
++#else
+ 		in_nls = load_nls("cp437");
++#endif
+ #else
+ 		in_nls = load_nls("iso8859-1");
+ #endif
+@@ -2343,7 +2500,18 @@ parse_input_files:
+ 	 * charset
+ 	 */
+ 	if (ocharset == NULL) {
++#ifdef	__MINGW32__
++		{
++			char	*cpname = __mgw32__ocharset();
++		
++			if (cpname)
++				out_nls = load_nls(cpname);
++			if (!out_nls)
++				out_nls = load_nls("cp437");
++		}
++#else
+ 		out_nls = in_nls;
++#endif
+ 	} else {
+ 		if (strcmp(ocharset, "default") == 0)
+ 			out_nls = load_nls_default();
+@@ -2411,6 +2579,10 @@ parse_input_files:
+ 		}
+ 	}
+ 	/* We don't need root privilleges anymore. */
++#ifndef	__MINGW32__
++/*
++ * Mingw32 has no UIDs and GIDs
++ */
+ #ifdef	HAVE_SETREUID
+ 	if (setreuid(-1, getuid()) < 0)
+ #else
+@@ -2428,6 +2600,7 @@ parse_input_files:
+ 		exit(1);
+ 	}
+ #endif
++#endif
+ 
+ 
+ #ifdef	no_more_needed
+@@ -2573,6 +2746,12 @@ parse_input_files:
+ 		rationalize_dirmode++;
+ 	}
+ 
++#ifdef	FORCE_UPPERCASE
++	if (force_uppercase) {
++		allow_lowercase = 0;
++	}
++#endif
++
+ 	if (verbose > 1) {
+ 		fprintf(stderr, "%s (%s-%s-%s)\n",
+ 				version_string,
+@@ -3151,7 +3330,11 @@ if (check_session == 0)
+ 
+ 	/* OK, ready to write the file.  Open it up, and generate the thing. */
+ 	if (print_size) {
++#ifdef	__MINGW32__
++		discimage = fopen("nul", "wb");
++#else
+ 		discimage = fopen("/dev/null", "wb");
++#endif
+ 		if (!discimage) {
+ #ifdef	USE_LIBSCHILY
+ 			comerr("Unable to open /dev/null\n");
+diff -rupN cdrtools-2.01.nls/mkisofs/mkisofs.h cdrtools-2.01.md5/mkisofs/mkisofs.h
+--- cdrtools-2.01.nls/mkisofs/mkisofs.h	2011-03-20 15:19:02.796875000 +0800
++++ cdrtools-2.01.md5/mkisofs/mkisofs.h	2011-03-20 15:00:00.000000000 +0800
+@@ -24,6 +24,12 @@
+ 
+ /* APPLE_HYB James Pearson j.pearson@ge.ucl.ac.uk 23/2/2000 */
+ 
++/* DUPLICATES_ONCE Alex Kopylov cdrtools@bootcd.ru 19.06.2004 */
++
++/* NLS-CJK_FIX Japan NOBORU noboru2000@yahoo.co.jp 27.12.2004 */
++
++/* NLS-2-MD5 Wwashington http://code.google.com/p/mkisofs-md5 */
++
+ #include <mconfig.h>	/* Must be before stdio.h for LARGEFILE support */
+ #include <stdio.h>
+ #include <statdefs.h>
+@@ -36,6 +42,12 @@
+ #include <libport.h>
+ #include "scsi.h"
+ 
++#ifdef	DUPLICATES_ONCE
++#include "config.h"
++#include "mytype.h"
++#include "md5.h"
++#endif
++
+ #ifdef	DVD_VIDEO
+ #ifndef	UDF
+ #define	UDF
+@@ -121,15 +133,22 @@ struct directory_entry {
+ #ifdef UDF
+ 	int		udf_file_entry_sector;	/* also used as UDF unique ID */
+ #endif
++#ifdef	DUPLICATES_ONCE
++	unsigned char	*md5_fast;
++	unsigned char	*md5_full;
++#endif
+ };
+ 
+ struct file_hash {
+ 	struct file_hash *next;
++#ifdef	DUPLICATES_ONCE
++	struct file_hash *unique_files_next;
++#endif
+ 	ino_t		inode;		/* Used in the hash table */
+ 	dev_t		dev;		/* Used in the hash table */
+ 	unsigned int	starting_block;
+ 	off_t		size;
+-#ifdef SORTING
++#if	defined(SORTING) || defined(DUPLICATES_ONCE)
+ 	struct directory_entry *de;
+ #endif /* SORTING */
+ };
+@@ -331,6 +350,9 @@ extern int	dirmode_to_use;
+ extern int	new_dir_mode;
+ extern int	follow_links;
+ extern int	cache_inodes;
++#ifdef	DUPLICATES_ONCE
++extern int duplicates_once;
++#endif
+ extern int	verbose;
+ extern int	debug;
+ extern int	gui;
+@@ -350,6 +372,8 @@ extern int	iso9660_level;
+ extern int	iso9660_namelen;
+ extern int	full_iso9660_filenames;
+ extern int	relaxed_filenames;
++extern int	cjk4dos_filenames;
++extern int	cjk4unx_filenames;
+ extern int	allow_lowercase;
+ extern int	allow_multidot;
+ extern int	iso_translate;
+@@ -532,7 +556,7 @@ extern int iso9660_file_length __PR((con
+ /* various */
+ extern int iso9660_date __PR((char *, time_t));
+ extern void add_hash __PR((struct directory_entry *));
+-extern struct file_hash *find_hash __PR((dev_t, ino_t));
++extern struct file_hash *find_hash __PR((struct directory_entry *));
+ 
+ extern void flush_hash __PR((void));
+ extern void add_directory_hash __PR((dev_t, ino_t));
+diff -rupN cdrtools-2.01.nls/mkisofs/mytype.h cdrtools-2.01.md5/mkisofs/mytype.h
+--- cdrtools-2.01.nls/mkisofs/mytype.h	1970-01-01 08:00:00.000000000 +0800
++++ cdrtools-2.01.md5/mkisofs/mytype.h	2011-03-20 15:00:14.734375000 +0800
+@@ -0,0 +1,27 @@
++/* @(#)mytype.h	1.2 99/12/19 Copyright 1998,1999 Heiko Eissfeldt */
++#if 4 == SIZEOF_LONG_INT
++#define UINT4 long unsigned int
++#define UINT4_C ULONG_C
++#else
++#if 4 == SIZEOF_INT
++#define UINT4 unsigned int
++#define UINT4_C UINT_C
++#else
++#if 4 == SIZEOF_SHORT_INT
++#define UINT4 short unsigned int
++#define UINT4_C USHORT_C
++#else
++error need an integer type with 32 bits, but do not know one!
++#endif
++#endif
++#endif
++#define TRUE 1
++#define FALSE 0
++
++#ifndef offset_of
++#define offset_of(TYPE, MEMBER) ((size_t) ((TYPE *)0)->MEMBER)
++#endif
++#ifndef offsetof
++#define offsetof(TYPE, MEMBER) ((size_t) &((TYPE *)0)->MEMBER)
++#endif
++
+diff -rupN cdrtools-2.01.nls/mkisofs/name.c cdrtools-2.01.md5/mkisofs/name.c
+--- cdrtools-2.01.nls/mkisofs/name.c	2011-03-20 15:19:02.828125000 +0800
++++ cdrtools-2.01.md5/mkisofs/name.c	2011-03-20 15:00:00.000000000 +0800
+@@ -108,6 +108,7 @@ iso9660_file_length(name, sresult, dirfl
+ 	int		dirflag;
+ {
+ 	char		c;
++	char		c2;
+ 	char		*cp;
+ 	int		before_dot = 8;
+ 	int		after_dot = 3;
+@@ -337,7 +338,7 @@ iso9660_file_length(name, sresult, dirfl
+ 			if ((seen_dot && (chars_after_dot < after_dot)) ||
+ 			    (!seen_dot && (chars_before_dot < before_dot))) {
+ 
+-				c = *pnt;
++				c = *pnt; c2 = *pnt;
+ 				if (c & 0x80) {
+ 					/*
+ 					 * We allow 8 bit chars if -iso-level
+@@ -367,7 +368,8 @@ iso9660_file_length(name, sresult, dirfl
+ 							chars_before_dot += dl;
+ 						continue;
+ 					} else {
+-						c = '_';
++						c = '_'; 
++						if (cjk4dos_filenames) c = c2; 
+ 					}
+ 				} else if (!allow_lowercase) {
+ 					c = islower((unsigned char)c) ?
+diff -rupN cdrtools-2.01.nls/mkisofs/tree.c cdrtools-2.01.md5/mkisofs/tree.c
+--- cdrtools-2.01.nls/mkisofs/tree.c	2004-06-12 21:16:37.000000000 +0800
++++ cdrtools-2.01.md5/mkisofs/tree.c	2011-03-20 15:00:14.828125000 +0800
+@@ -30,6 +30,8 @@ static	char sccsid[] =
+ 
+ /* APPLE_HYB James Pearson j.pearson@ge.ucl.ac.uk 23/2/2000 */
+ 
++/* DUPLICATES_ONCE Alex Kopylov cdrtools@bootcd.ru 19.06.2004 */
++
+ #include <mconfig.h>
+ #include "mkisofs.h"
+ #include "match.h"
+@@ -220,7 +222,7 @@ stat_fix(st)
+ 			 */
+ 
+ 			st->st_mode |= 0444;
+-#if !defined(_WIN32) && !defined(__DJGPP__)	/* make all file "executable" */
++#if !defined(_WIN32) && !defined(__DJGPP__) && !defined(__MINGW32__)	/* make all file "executable" */
+ 			if (st->st_mode & 0111)
+ #endif
+ 				st->st_mode |= 0111;
+@@ -1757,6 +1759,10 @@ insert_file_entry(this_dir, whole_path, 
+ 	s_entry->whole_name = strdup(whole_path);
+ 
+ 	s_entry->de_flags = 0;
++#ifdef	DUPLICATES_ONCE
++	s_entry->md5_fast = NULL;
++	s_entry->md5_full = NULL;
++#endif
+ 
+ 	/*
+ 	 * If the current directory is hidden, then hide all it's members
+@@ -2695,12 +2701,22 @@ init_fstatbuf()
+ 		time(&current_time);
+ 		if (rationalize_uid)
+ 			fstatbuf.st_uid = uid_to_use;
++#ifndef	__MINGW32__
++/*
++ * Mingw32 has no UIDs and GIDs
++ */
+ 		else
+ 			fstatbuf.st_uid = getuid();
++#endif
+ 		if (rationalize_gid)
+ 			fstatbuf.st_gid = gid_to_use;
++#ifndef	__MINGW32__
++/*
++ * Mingw32 has no UIDs and GIDs
++ */
+ 		else
+ 			fstatbuf.st_gid = getgid();
++#endif
+ 		fstatbuf.st_ctime = current_time;
+ 		fstatbuf.st_mtime = current_time;
+ 		fstatbuf.st_atime = current_time;
+diff -rupN cdrtools-2.01.nls/mkisofs/write.c cdrtools-2.01.md5/mkisofs/write.c
+--- cdrtools-2.01.nls/mkisofs/write.c	2004-08-25 00:21:55.000000000 +0800
++++ cdrtools-2.01.md5/mkisofs/write.c	2011-03-20 15:00:14.921875000 +0800
+@@ -28,6 +28,8 @@ static	char sccsid[] =
+ 
+ /* APPLE_HYB James Pearson j.pearson@ge.ucl.ac.uk 23/2/2000 */
+ 
++/* DUPLICATES_ONCE Alex Kopylov cdrtools@bootcd.ru 19.06.2004 */
++
+ #include <mconfig.h>
+ #include "mkisofs.h"
+ #include <timedefs.h>
+@@ -909,7 +911,7 @@ reassign_link_addresses(dpnt)
+ 				continue;
+ 
+ 			/* update the start extent */
+-			s_hash = find_hash(s_entry->dev, s_entry->inode);
++			s_hash = find_hash(s_entry);
+ 			if (s_hash) {
+ 				set_733((char *) s_entry->isorec.extent, s_hash->starting_block);
+ 				s_entry->starting_block = s_hash->starting_block;
+@@ -1062,7 +1064,7 @@ assign_file_addresses(dpnt)
+ 			/*
+ 			 * This saves some space if there are symlinks present
+ 			 */
+-			s_hash = find_hash(s_entry->dev, s_entry->inode);
++			s_hash = find_hash(s_entry);
+ 			if (s_hash) {
+ 				if (verbose > 2) {
+ 					fprintf(stderr, "Cache hit for '%s%s%s'\n", s_entry->filedir->de_name,
+@@ -1339,6 +1341,18 @@ free_one_directory(dpnt)
+ 			free(s_entry_d->hfs_ent);
+ #endif	/* APPLE_HYB */
+ 
++#ifdef	DUPLICATES_ONCE
++		if(s_entry_d->md5_fast) {
++
++			if(s_entry_d->md5_full && (s_entry_d->md5_full != s_entry_d->md5_fast))
++				free(s_entry_d->md5_full);
++
++			free(s_entry_d->md5_fast);
++
++			s_entry_d->md5_fast = NULL;
++			s_entry_d->md5_full = NULL;
++		}
++#endif
+ 		free(s_entry_d);
+ 		s_entry_d = NULL;
+ 	}
+@@ -2719,7 +2733,7 @@ adj_size_other(dpnt)
+ 			 * find any cached entry and assign new starting
+ 			 * extent
+ 			 */
+-			s_hash = find_hash(s_entry->dev, s_entry->inode);
++			s_hash = find_hash(s_entry);
+ 			if (s_hash) {
+ 				set_733((char *) s_entry->isorec.extent,
+ 						s_hash->starting_block);
+diff -rupN cdrtools-2.01.nls/readcd/defaults.c cdrtools-2.01.md5/readcd/defaults.c
+--- cdrtools-2.01.nls/readcd/defaults.c	2004-03-02 09:10:32.000000000 +0800
++++ cdrtools-2.01.md5/readcd/defaults.c	2011-03-20 15:00:14.937500000 +0800
+@@ -42,6 +42,35 @@ LOCAL	char *	strsv		__PR((char *s));
+ LOCAL int
+ open_cdrdefaults()
+ {
++#if	defined(__DJGPP__) || defined(__MINGW32__)
++
++	char	*ininame = "cdrecord.ini";
++	char	*defltname = ininame;
++	int	ret = -1;
++	char	*av0 = saved_av0();
++	char	*av0_last_slash;
++
++	if (av0)
++		av0_last_slash = strrchr(av0, '/');
++
++	if (av0 && av0_last_slash) {
++
++		int	av0_path_len = (av0_last_slash - av0) + 1;
++
++		defltname = malloc(av0_path_len + strlen(ininame) + 1);
++		strncpy(defltname, av0, av0_path_len);
++		strcpy(defltname + av0_path_len, ininame);
++	}
++
++	if (defltname) {
++		ret = defltopen(defltname);
++		if (defltname != ininame)
++			free(defltname);
++	}
++
++	if (!ret)
++		return (0);
++#endif
+ 	/*
+ 	 * WARNING you are only allowed to change this filename if you also
+ 	 * change the documentation and add a statement that makes clear
+diff -rupN cdrtools-2.01.nls/readcd/readcd.c cdrtools-2.01.md5/readcd/readcd.c
+--- cdrtools-2.01.nls/readcd/readcd.c	2004-09-09 01:24:14.000000000 +0800
++++ cdrtools-2.01.md5/readcd/readcd.c	2011-03-20 15:00:00.000000000 +0800
+@@ -51,7 +51,7 @@ static	char sccsid[] =
+ #undef	qpto96
+ #include "movesect.h"
+ 
+-char	cdr_version[] = "2.01";
++char	cdr_version[] = "2.01-bootcd.ru";
+ 
+ #if	defined(PROTOTYPES)
+ #define	UINT_C(a)	(a##u)
+@@ -268,7 +268,17 @@ main(ac, av)
+ 	char	*filename = NULL;
+ 	char	*sectors = NULL;
+ 
++#ifdef	__DJGPP__
++	/* Get time zone information from TZ environment variable */
++	tzset();
++#endif
++#ifdef	__MINGW32__
++	__mgw32__init(av[0]);
++#endif
+ 	save_args(ac, av);
++#if	defined(__DJGPP__) || defined(__MINGW32__)
++	set_progname("readcd");
++#endif
+ 
+ 	cac = --ac;
+ 	cav = ++av;
+@@ -296,7 +306,7 @@ main(ac, av)
+ 	if (help)
+ 		usage(0);
+ 	if (pversion) {
+-		printf("readcd %s (%s-%s-%s) Copyright (C) 1987, 1995-2003 Jörg Schilling\n",
++		printf("readcd %s (%s-%s-%s) Copyright (C) 1987, 1995-2003 Joerg Schilling\n",
+ 								cdr_version,
+ 								HOST_CPU, HOST_VENDOR, HOST_OS);
+ 		exit(0);
+@@ -365,8 +375,15 @@ main(ac, av)
+ 			int	err = geterrno();
+ 
+ 			errmsgno(err, "%s%sCannot open SCSI driver.\n", errstr, errstr[0]?". ":"");
++#ifndef	__MINGW32__
++/*
++ * Mingw32 has no UIDs and GIDs
++ */
+ 			errmsgno(EX_BAD, "For possible targets try 'readcd -scanbus'.%s\n",
+ 						geteuid() ? " Make sure you are root.":"");
++#else
++			errmsgno(EX_BAD, "For possible targets try 'readcd -scanbus'.\n");
++#endif
+ 			errmsgno(EX_BAD, "For possible transport specifiers try 'readcd dev=help'.\n");
+ 			exit(err);
+ 		}
+@@ -394,6 +411,10 @@ main(ac, av)
+ 	if ((Sbuf = scg_getbuf(scgp, Sbufsize)) == NULL)
+ 		comerr("Cannot get SCSI I/O buffer.\n");
+ 
++#ifndef	__MINGW32__
++/*
++ * Mingw32 has no UIDs and GIDs
++ */
+ 	is_suid = geteuid() != getuid();
+ 	/*
+ 	 * We don't need root privilleges anymore.
+@@ -408,6 +429,9 @@ main(ac, av)
+ #endif
+ #endif
+ 		comerr("Panic cannot set back effective uid.\n");
++#else
++	is_suid = FALSE;
++#endif
+ 
+ 	/* code to use SCG */
+ 
+@@ -634,7 +658,11 @@ dorw(scgp, filename, sectors)
+ 		params.name = filename;
+ 	if (meshpoints > 0) {
+ 		if (params.name == NULL)
++#ifdef	__MINGW32__
++			params.name = "nul";
++#else
+ 			params.name = "/dev/null";
++#endif
+ 	}
+ 	if (sectors)
+ 		p = astol(sectors, &params.start);
+@@ -649,7 +677,11 @@ dorw(scgp, filename, sectors)
+ #ifdef	CLONE_WRITE
+ 	if (fulltoc) {
+ 		if (params.name == NULL)
++#ifdef	__MINGW32__
++			params.name = "nul";
++#else
+ 			params.name = "/dev/null";
++#endif
+ 		read_ftoc(scgp, &params, FALSE);
+ 	} else if (clone) {
+ 		if (!is_mmc(scgp, NULL, NULL))
+@@ -658,7 +690,11 @@ dorw(scgp, filename, sectors)
+ 		if (retries == MAX_RETRY)
+ 			retries = 10;
+ 		if (params.name == NULL)
++#ifdef	__MINGW32__
++			params.name = "nul";
++#else
+ 			params.name = "/dev/null";
++#endif
+ 
+ 		if (read_ftoc(scgp, &params, TRUE) < 0)
+ 			comerrno(EX_BAD, "Read fulltoc problems.\n");
+@@ -670,7 +706,11 @@ dorw(scgp, filename, sectors)
+ 		if (retries == MAX_RETRY)
+ 			retries = 10;
+ 		if (params.name == NULL)
++#ifdef	__MINGW32__
++			params.name = "nul";
++#else
+ 			params.name = "/dev/null";
++#endif
+ 		readc2_disk(scgp, &params);
+ 	} else if (do_write)
+ 		write_disk(scgp, &params);
+@@ -689,7 +729,11 @@ doit(scgp)
+ 	params.end = -1;
+ 	params.sptr = -1;
+ 	params.askrange = TRUE;
++#ifdef	__MINGW32__
++	params.name = "nul";
++#else
+ 	params.name = "/dev/null";
++#endif
+ 
+ 	for (;;) {
+ 		if (!wait_unit_ready(scgp, 60))
+@@ -882,7 +926,11 @@ read_ftoc(scgp, parmp, do_sectype)
+ 
+ 
+ 	strcpy(filename, "toc.dat");
++#ifdef	__MINGW32__
++	if (strcmp(parmp->name, "nul") != 0) {
++#else
+ 	if (strcmp(parmp->name, "/dev/null") != 0) {
++#endif
+ 
+ 		len = strlen(parmp->name);
+ 		if (len > (sizeof (filename)-5)) {
+diff -rupN cdrtools-2.01.nls/readme.1st cdrtools-2.01.md5/readme.1st
+--- cdrtools-2.01.nls/readme.1st	1970-01-01 08:00:00.000000000 +0800
++++ cdrtools-2.01.md5/readme.1st	2011-03-20 15:00:15.015625000 +0800
+@@ -0,0 +1,104 @@
++
++cdrtools (cdrecord, mkisofs, readcd, cdda2wav)
++by Joerg Schilling
++with storage optimization (mkisofs)
++and without cygwin1.dll (Win32/Mingw32 version) 
++
++NOTE:
++This version of cdrtools is an inofficial (modified) release of cdrtools
++and thus may have bugs that are not present in the original version.
++Please send bug reports and support requests to cdrtools@bootcd.ru.
++The original author should not be bothered with problems of this version.
++
++This program is distributed in the hope that it will be useful,
++but WITHOUT ANY WARRANTY; without even the implied warranty of
++MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
++GNU General Public License for more details.
++
++Diffirences with original version:
++
++- Added hacks for Mingw32 (http://www.mingw.org) compilation environment
++
++Differences with original Win32/Cygwin32 version:
++
++all tools:
++
++- cygwin1.dll is not required
++
++- In addition to the configuration file /etc/default/cdrecord
++  the configuration file cdrecord.ini (in cdrtools directory) can be used
++
++- More readable messages, e.g.:
++
++  cdrecord: I/O error.
++
++  instead of:
++
++  /cygdrive/c/cdrtools-2.01/cdrecord/OBJ/i686-mingw32_nt-gcc/cdrecord: I/O error.
++
++mkisofs:
++
++- New option:
++
++  -duplicates-once	Optimize storage by encoding duplicate files once
++
++- New option:
++
++  -force-uppercase	Do not allow lower case characters
++
++  Hint: Use 'mkisofs -iso-level 4 -force-uppercase' to create BartPE (WinPE) ISOs
++  
++- Option -cache-inodes is ignored (Windows has no inodes)
++
++- Option -follow-links is ignored (Windows has no symlinks)
++
++- Option -rock have same effect as option -rational-rock
++
++- The current ANSI codepage will be used as -input-charset by default.
++  In a case if the current ANSI codepage is not supported by cdrtools,
++  iso8859-1 (is similar to cp1252) will be used
++
++- The current OEM codepage will be used as -output-charset by default.
++  In a case if the current OEM codepage is not supported by cdrtools,
++  cp437 will be used
++
++cdda2wav:
++
++- Option -echo now works
++
++Differences with original MS-DOS/DJGPP version:
++
++all tools:
++
++- In addition to the configuration file /etc/default/cdrecord
++  the configuration file cdrecord.ini (in cdrtools directory) can be used
++
++- More readable messages, e.g.:
++
++  cdrecord: I/O error.
++
++  instead of:
++
++  c:/cdrtoo~1.01/cdrecord/obj/i686-m~1/cdrecord.exe: I/O error.
++
++mkisofs:
++
++- New option:
++
++  -duplicates-once	Optimize storage by encoding duplicate files once
++
++  Note: -duplicates-once can be combined with -cache-inodes and -follow-links
++  
++- New option:
++
++  -force-uppercase	Do not allow lower case characters
++
++  Hint: Use 'mkisofs -iso-level 4 -force-uppercase' to create BartPE (WinPE) ISOs
++
++- Time zone information can be specified using TZ environment variable, e.g.:
++
++  set TZ=UTC-3
++
++- The current DOS codepage will be used as -input-charset and -output-charset
++  by default. In a case if the current DOS codepage is not supported by cdrtools,
++  cp437 will be used
+diff -rupN cdrtools-2.01.nls/rscsi/rscsi.c cdrtools-2.01.md5/rscsi/rscsi.c
+--- cdrtools-2.01.nls/rscsi/rscsi.c	2003-11-26 08:28:27.000000000 +0800
++++ cdrtools-2.01.md5/rscsi/rscsi.c	2011-03-20 15:00:15.062500000 +0800
+@@ -43,7 +43,9 @@ static	char sccsid[] =
+ #include <sys/param.h>	/* BSD-4.2 & Linux need this for MAXHOSTNAMELEN */
+ #endif
+ #include <errno.h>
++#ifdef	HAVE_PWD_H	/* Mingw32 has no pwd.h */
+ #include <pwd.h>
++#endif
+ 
+ #include <standard.h>
+ #include <deflts.h>
+@@ -53,7 +55,9 @@ static	char sccsid[] =
+ #include <scg/scgcmd.h>
+ #include <scg/scsitransp.h>
+ 
++#ifndef	__MINGW32__		/* Mingw32 has no netinet/in.h */
+ #include <netinet/in.h>
++#endif
+ #ifdef	HAVE_ARPA_INET_H
+ #include <arpa/inet.h>		/* BeOS does not have <arpa/inet.h> */
+ #endif				/* but inet_ntaoa() is in <netdb.h> */
+@@ -119,7 +123,17 @@ main(argc, argv)
+ 	int	argc;
+ 	char	**argv;
+ {
++#ifdef	__DJGPP__
++	/* Get time zone information from TZ environment variable */
++	tzset();
++#endif
++#ifdef	__MINGW32__
++	__mgw32__init(argv[0]);
++#endif
+ 	save_args(argc, argv);
++#if	defined(__DJGPP__) || defined(__MINGW32__)
++	set_progname("rscsi");
++#endif
+ #ifndef	USE_REMOTE
+ 	comerrno(EX_BAD, "No remote SCSI support on this platform.\n");
+ #else
+diff -rupN cdrtools-2.01.nls/scgcheck/scgcheck.c cdrtools-2.01.md5/scgcheck/scgcheck.c
+--- cdrtools-2.01.nls/scgcheck/scgcheck.c	2004-09-09 01:49:48.000000000 +0800
++++ cdrtools-2.01.md5/scgcheck/scgcheck.c	2011-03-20 15:00:00.000000000 +0800
+@@ -64,7 +64,7 @@ long	bufsize;		/* The size of the transf
+ 
+ FILE	*logfile;
+ char	unavail[] = "<data unavaiable>";
+-char	scgc_version[] = "2.01";
++char	scgc_version[] = "2.01-bootcd.ru";
+ int	basefds;
+ 
+ #define	BUF_SIZE	(126*1024)
+@@ -107,7 +107,17 @@ main(ac, av)
+ 	BOOL	pversion = FALSE;
+ 	char	*filename = "check.log";
+ 
++#ifdef	__DJGPP__
++	/* Get time zone information from TZ environment variable */
++	tzset();
++#endif
++#ifdef	__MINGW32__
++	__mgw32__init(av[0]);
++#endif
+ 	save_args(ac, av);
++#if	defined(__DJGPP__) || defined(__MINGW32__)
++	set_progname("scgcheck");
++#endif
+ 
+ 	cac = --ac;
+ 	cav = ++av;
+@@ -129,7 +139,7 @@ main(ac, av)
+ 	if (help)
+ 		usage(0);
+ 	if (pversion) {
+-		printf("scgckeck %s (%s-%s-%s) Copyright (C) 1998-2002 Jörg Schilling\n",
++		printf("scgckeck %s (%s-%s-%s) Copyright (C) 1998-2002 Joerg Schilling\n",
+ 								scgc_version,
+ 								HOST_CPU, HOST_VENDOR, HOST_OS);
+ 		exit(0);
+@@ -153,11 +163,11 @@ main(ac, av)
+ 		comerr("Cannot open logfile.\n");
+ 
+ 	printf("Scgcheck %s (%s-%s-%s) SCSI user level transport library ABI checker.\n\
+-Copyright (C) 1998,2001 Jörg Schilling\n",
++Copyright (C) 1998,2001 Joerg Schilling\n",
+ 						scgc_version,
+ 						HOST_CPU, HOST_VENDOR, HOST_OS);
+ 	fprintf(logfile, "Scgcheck %s (%s-%s-%s) SCSI user level transport library ABI checker.\n\
+-Copyright (C) 1998,2001 Jörg Schilling\n",
++Copyright (C) 1998,2001 Joerg Schilling\n",
+ 						scgc_version,
+ 						HOST_CPU, HOST_VENDOR, HOST_OS);
+ 	/*
+@@ -496,9 +506,14 @@ countopen()
+ 	int	nopen = 0;
+ 	int	i;
+ 
++#ifndef	__MINGW32__
++/*
++ * FIXME: Mingw32 has no fcntl() and F_GETFD
++ */
+ 	for (i = 0; i < 1000; i++) {
+ 		if (fcntl(i, F_GETFD, 0) >= 0)
+ 			nopen++;
+ 	}
++#endif
+ 	return (nopen);
+ }
+diff -rupN cdrtools-2.01.nls/scgskeleton/defaults.c cdrtools-2.01.md5/scgskeleton/defaults.c
+--- cdrtools-2.01.nls/scgskeleton/defaults.c	2004-03-02 09:10:32.000000000 +0800
++++ cdrtools-2.01.md5/scgskeleton/defaults.c	2011-03-20 15:00:15.203125000 +0800
+@@ -42,6 +42,35 @@ LOCAL	char *	strsv		__PR((char *s));
+ LOCAL int
+ open_cdrdefaults()
+ {
++#if	defined(__DJGPP__) || defined(__MINGW32__)
++
++	char	*ininame = "cdrecord.ini";
++	char	*defltname = ininame;
++	int	ret = -1;
++	char	*av0 = saved_av0();
++	char	*av0_last_slash;
++
++	if (av0)
++		av0_last_slash = strrchr(av0, '/');
++
++	if (av0 && av0_last_slash) {
++
++		int	av0_path_len = (av0_last_slash - av0) + 1;
++
++		defltname = malloc(av0_path_len + strlen(ininame) + 1);
++		strncpy(defltname, av0, av0_path_len);
++		strcpy(defltname + av0_path_len, ininame);
++	}
++
++	if (defltname) {
++		ret = defltopen(defltname);
++		if (defltname != ininame)
++			free(defltname);
++	}
++
++	if (!ret)
++		return (0);
++#endif
+ 	/*
+ 	 * WARNING you are only allowed to change this filename if you also
+ 	 * change the documentation and add a statement that makes clear
+diff -rupN cdrtools-2.01.nls/scgskeleton/skel.c cdrtools-2.01.md5/scgskeleton/skel.c
+--- cdrtools-2.01.nls/scgskeleton/skel.c	2004-07-11 06:57:27.000000000 +0800
++++ cdrtools-2.01.md5/scgskeleton/skel.c	2011-03-20 15:00:00.000000000 +0800
+@@ -130,7 +130,17 @@ main(ac, av)
+ 	SCSI	*scgp;
+ 	char	*filename = NULL;
+ 
++#ifdef	__DJGPP__
++	/* Get time zone information from TZ environment variable */
++	tzset();
++#endif
++#ifdef	__MINGW32__
++	__mgw32__init(av[0]);
++#endif
+ 	save_args(ac, av);
++#if	defined(__DJGPP__) || defined(__MINGW32__)
++	set_progname("skel");
++#endif
+ 
+ 	cac = --ac;
+ 	cav = ++av;
+@@ -155,7 +165,7 @@ main(ac, av)
+ 	if (help)
+ 		usage(0);
+ 	if (pversion) {
+-		printf("scgskeleton %s (%s-%s-%s) Copyright (C) 1987, 1995-2003 Jörg Schilling\n",
++		printf("scgskeleton %s (%s-%s-%s) Copyright (C) 1987, 1995-2003 Joerg Schilling\n",
+ 								skel_version,
+ 								HOST_CPU, HOST_VENDOR, HOST_OS);
+ 		exit(0);
+@@ -251,6 +261,10 @@ main(ac, av)
+ 	if ((Sbuf = scg_getbuf(scgp, Sbufsize)) == NULL)
+ 		comerr("Cannot get SCSI I/O buffer.\n");
+ 
++#ifndef	__MINGW32__
++/*
++ * Mingw32 has no UIDs and GIDs
++ */
+ 	is_suid = geteuid() != getuid();
+ 	/*
+ 	 * We don't need root privilleges anymore.
+@@ -265,6 +279,9 @@ main(ac, av)
+ #endif
+ #endif
+ 		comerr("Panic cannot set back effective uid.\n");
++#else
++	is_suid = FALSE;
++#endif
+ 
+ 	/* code to use SCG */
+ 
